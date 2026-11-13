@@ -1,0 +1,910 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="color-scheme" content="light dark" />
+<link rel="icon" href="data:," />
+<title>ブルベ・イエベ判定アプリ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700;800&family=Zen+Kaku+Gothic+New:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#FFFBF6;
+    --bg2:#FFF4EA;
+    --surface:#FFFFFF;
+    --surface2:#FFF8F1;
+    --ink:#221C18;
+    --muted:#7A6E64;
+    --line:#EADDD0;
+    --warm:#C2703E;
+    --warm-bg:#FDEEE2;
+    --cool:#5B7A9E;
+    --cool-bg:#EAF0F7;
+    --gold:#B9975B;
+    --silver:#9AA5B1;
+    --shadow:0 18px 40px rgba(90,55,20,.10);
+    --radius:20px;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg:#171310;
+      --bg2:#1E1915;
+      --surface:#221D19;
+      --surface2:#29221D;
+      --ink:#F5EDE6;
+      --muted:#B8A99C;
+      --line:#3A332D;
+      --warm:#E39A6B;
+      --warm-bg:#3A2718;
+      --cool:#9AB6D6;
+      --cool-bg:#1E2E42;
+      --shadow:0 18px 40px rgba(0,0,0,.35);
+    }
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:"Zen Kaku Gothic New",system-ui,-apple-system,sans-serif;line-height:1.7;-webkit-font-smoothing:antialiased}
+  button,[role="button"]{min-height:44px}
+  a{color:inherit}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 18px 56px}
+  /* Hero */
+  .hero{padding:34px 0 8px;display:grid;grid-template-columns:1.15fr .85fr;gap:28px;align-items:end}
+  .kicker{display:inline-flex;align-items:center;gap:8px;font-size:12px;letter-spacing:.14em;font-weight:700;text-transform:uppercase;color:var(--muted)}
+  .kicker i{width:28px;height:1px;background:var(--ink);display:inline-block}
+  h1{font-family:"Shippori Mincho",serif;font-size:clamp(38px,6vw,64px);line-height:1.08;margin:14px 0 12px;font-weight:800;letter-spacing:.02em}
+  h1 .warm{color:var(--warm)} h1 .cool{color:var(--cool)}
+  .lead{font-size:16px;color:var(--muted);max-width:560px;margin:0}
+  .lead strong{color:var(--ink)}
+  .hero-visual{position:relative}
+  .face-card{background:var(--surface);border:1px solid var(--line);border-radius:24px;padding:16px;box-shadow:var(--shadow)}
+  .duo{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .duo div{border-radius:16px;padding:14px 12px;min-height:118px;display:flex;flex-direction:column;justify-content:space-between}
+  .duo .w{background:linear-gradient(160deg,#FFE3B3,#FFB98A);color:#5C2E0E}
+  .duo .c{background:linear-gradient(160deg,#DCEAFF,#F3C6D6);color:#243A5A}
+  .duo b{font-family:"Shippori Mincho",serif;font-size:22px;line-height:1}
+  .duo span{font-size:12px;font-weight:700;letter-spacing:.06em;opacity:.85}
+  .duo small{font-size:11px;line-height:1.5;opacity:.9}
+  .hero-note{margin-top:10px;display:flex;gap:8px;flex-wrap:wrap}
+  .chip{font-size:12px;font-weight:700;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:7px 11px}
+  /* Main grid */
+  .main{display:grid;grid-template-columns:1.2fr .8fr;gap:18px;margin-top:26px;align-items:start}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow)}
+  .card h2{font-family:"Shippori Mincho",serif;font-size:22px;margin:0 0 6px;line-height:1.3}
+  .card h3{font-size:14px;letter-spacing:.08em;margin:0 0 10px}
+  .sub{color:var(--muted);font-size:13.5px;margin:0 0 16px}
+  /* Upload */
+  .drop{border:1.8px dashed #D8BFA6;border-radius:18px;background:var(--surface2);padding:8px;transition:.2s;cursor:pointer}
+  .drop.drag{border-color:var(--warm);background:var(--warm-bg);transform:scale(.995)}
+  .drop-inner{border-radius:14px;min-height:300px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px 18px;position:relative;overflow:hidden}
+  .drop.has-photo .drop-inner{padding:10px;min-height:auto}
+  .upload-icon{width:62px;height:62px;border-radius:50%;background:var(--ink);color:var(--bg);display:grid;place-items:center;margin-bottom:14px}
+  .upload-icon svg{width:28px;height:28px}
+  .drop b{font-size:18px}
+  .drop p{color:var(--muted);font-size:13px;margin:6px 0 0;max-width:360px}
+  #previewWrap{display:none;width:100%}
+  #previewWrap.show{display:block}
+  .previewBox{position:relative;border-radius:14px;overflow:hidden;background:#000}
+  .previewBox img{width:100%;height:380px;object-fit:cover;display:block}
+  .face-guide{position:absolute;inset:0;display:grid;place-items:center;pointer-events:none}
+  .face-guide span{width:44%;aspect-ratio:.78;border:2px dashed rgba(255,255,255,.95);border-radius:50%;box-shadow:0 0 0 999px rgba(0,0,0,.12)}
+  .scan{position:absolute;left:0;right:0;height:56px;top:-70px;background:linear-gradient(180deg,transparent,rgba(255,255,255,.75),transparent);display:none}
+  .scanning .scan{display:block;animation:scan 1.15s linear infinite}
+  @keyframes scan{to{transform:translateY(480px)}}
+  @media (prefers-reduced-motion: reduce){.scanning .scan{animation:none}}
+  .fileMeta{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-top:10px;font-size:12px;color:var(--muted)}
+  .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+  .btn{appearance:none;border:0;cursor:pointer;border-radius:999px;padding:0 20px;font-weight:800;font-size:15px;display:inline-flex;align-items:center;justify-content:center;gap:8px;text-decoration:none}
+  .btn-primary{background:var(--ink);color:var(--bg);flex:1;min-height:52px}
+  .btn-primary:disabled{opacity:.45;cursor:not-allowed}
+  .btn-ghost{background:transparent;color:var(--ink);border:1px solid var(--line);min-height:52px;padding:0 16px}
+  .btn-small{min-height:40px;font-size:13px;padding:0 14px}
+  .drop:focus-visible{outline:3px solid var(--warm);outline-offset:3px}
+  /* Steps */
+  .steps{display:grid;gap:12px}
+  .step{display:flex;gap:12px;padding:13px 0;border-bottom:1px solid var(--line)}
+  .step:last-child{border-bottom:0}
+  .num{flex:0 0 36px;width:36px;height:36px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;font-family:"Shippori Mincho",serif;font-weight:800}
+  .step b{font-size:14px} .step p{margin:2px 0 0;color:var(--muted);font-size:13px;line-height:1.6}
+  .tips{list-style:none;padding:0;margin:0;display:grid;gap:9px}
+  .tips li{display:flex;gap:10px;font-size:13.5px;line-height:1.6}
+  .tips li::before{content:"";flex:0 0 18px;width:18px;height:18px;margin-top:3px;border-radius:50%;background:var(--warm-bg);border:1px solid var(--line);background-image:radial-gradient(circle at center, var(--warm) 0 3px, transparent 4px)}
+  .meterLabels{display:flex;justify-content:space-between;font-size:11px;font-weight:800;letter-spacing:.06em;color:var(--muted);margin-top:14px}
+  .spectrum{height:10px;border-radius:999px;background:linear-gradient(90deg,#7FA8D1 0%,#CBD6E8 28%,#F3E6D8 52%,#F6C177 75%,#D98236 100%);margin-top:6px;position:relative}
+  .spectrum i{position:absolute;top:50%;width:18px;height:18px;border-radius:50%;background:white;border:3px solid var(--ink);transform:translate(-50%,-50%);box-shadow:0 2px 8px rgba(0,0,0,.2)}
+  /* Result */
+  #result{display:none;margin-top:18px}
+  #result.show{display:block}
+  .resultTop{display:grid;grid-template-columns:1fr 340px;gap:18px}
+  .resultHero{border-radius:20px;padding:24px;color:white;position:relative;overflow:hidden;min-height:260px;display:flex;flex-direction:column;justify-content:flex-end}
+  .resultHero::after{content:"";position:absolute;inset:0;background:radial-gradient(600px 260px at 85% 0%,rgba(255,255,255,.35),transparent 60%)}
+  .resultHero > *{position:relative;z-index:1}
+  .resultHero .label{font-size:12px;letter-spacing:.14em;font-weight:900;opacity:.9}
+  .resultHero h2{font-family:"Shippori Mincho",serif;font-size:clamp(36px,5vw,56px);line-height:1;margin:8px 0 6px;color:white}
+  .resultHero p{margin:0;opacity:.95;font-size:14.5px;max-width:560px}
+  .type-spring{background:linear-gradient(135deg,#E9A13B,#E87A4A 55%,#D95D7A)}
+  .type-summer{background:linear-gradient(135deg,#7A9AB8,#8A7FB8 55%,#C48AA6)}
+  .type-autumn{background:linear-gradient(135deg,#8A5A2B,#A65A2E 50%,#6B7A3A)}
+  .type-winter{background:linear-gradient(135deg,#1F3A5F,#5B2A6B 55%,#111827)}
+  .sampleBox{display:flex;gap:12px;align-items:center}
+  .skinChip{width:72px;height:72px;border-radius:16px;border:3px solid white;box-shadow:0 8px 20px rgba(0,0,0,.15);flex:0 0 72px}
+  .diagGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px}
+  .diag{background:var(--surface2);border:1px solid var(--line);border-radius:14px;padding:12px}
+  .diag span{font-size:11px;font-weight:800;letter-spacing:.06em;color:var(--muted)}
+  .diag b{display:block;font-size:15px;margin-top:2px}
+  .bar{height:7px;background:var(--line);border-radius:999px;overflow:hidden;margin-top:8px}
+  .bar i{display:block;height:100%;border-radius:999px;background:var(--ink)}
+  .palette{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+  .swatch{border-radius:14px;overflow:hidden;border:1px solid var(--line);background:var(--surface)}
+  .swatch i{display:block;height:56px}
+  .swatch span{display:block;padding:7px 8px;font-size:11.5px;font-weight:700;line-height:1.3}
+  .swatch small{display:block;color:var(--muted);font-weight:500;font-size:11px}
+  .cols{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-top:14px}
+  .mini{border-top:1px solid var(--line);padding-top:14px}
+  .mini h4{margin:0 0 8px;font-size:14px}
+  .mini ul{margin:0;padding-left:18px;color:var(--muted);font-size:13.5px}
+  .mini li{margin:4px 0}
+  .avoid{display:flex;gap:8px;flex-wrap:wrap}
+  .avoid span{width:38px;height:38px;border-radius:50%;border:2px solid var(--line);position:relative}
+  .avoid span::after{content:"";position:absolute;left:50%;top:-2px;bottom:-2px;width:2px;background:#D64545;transform:rotate(45deg)}
+  .progress{display:none;align-items:center;gap:10px;margin-top:14px;font-size:13px;font-weight:700;color:var(--muted)}
+  .progress.show{display:flex}
+  .spinner{width:18px;height:18px;border-radius:50%;border:2px solid var(--line);border-top-color:var(--ink);animation:spin .7s linear infinite;flex:0 0 18px}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .note{font-size:12px;color:var(--muted);line-height:1.7;margin-top:14px;border-top:1px dashed var(--line);padding-top:12px}
+  .hiddenCanvas{display:none}
+
+  /* Accuracy upgrade: thumbnails, confidence, quality */
+  .thumbs{display:none;gap:8px;flex-wrap:wrap;margin-top:12px}
+  .thumbs.show{display:flex}
+  .thumb{position:relative;width:64px;height:64px;min-height:64px;border-radius:12px;overflow:hidden;border:2px solid var(--line);cursor:pointer;padding:0;background:none}
+  .thumb.active{border-color:var(--ink)}
+  .thumb img{width:100%;height:100%;object-fit:cover;display:block}
+  .thumb .rm{position:absolute;top:2px;right:2px;width:20px;height:20px;border-radius:50%;background:rgba(0,0,0,.65);color:#fff;font-size:13px;line-height:1;display:grid;place-items:center}
+  .addHint{font-size:12px;color:var(--muted);line-height:1.5}
+  .confHead{display:flex;align-items:baseline;gap:10px;margin-top:18px;border-top:1px solid var(--line);padding-top:14px;flex-wrap:wrap}
+  .confHead .confTitle{font-size:12px;font-weight:800;letter-spacing:.06em;color:var(--muted)}
+  .confHead b{font-size:26px;font-family:"Shippori Mincho",serif;line-height:1}
+  .confBar{height:8px;background:var(--line);border-radius:999px;overflow:hidden;margin-top:6px}
+  .confBar i{display:block;height:100%;background:linear-gradient(90deg,var(--cool),var(--warm))}
+  .seasonBars{display:grid;gap:7px;margin-top:12px}
+  .seasonRow{display:grid;grid-template-columns:64px 1fr 38px;gap:8px;align-items:center;font-size:12.5px}
+  .seasonRow .bar{margin-top:0}
+  .seasonRow.best{font-weight:800}
+  .quality{list-style:none;padding:0;margin:10px 0 0;display:grid;gap:6px;font-size:12.5px}
+  .quality li{display:flex;gap:8px;align-items:flex-start;line-height:1.55}
+  .q-badge{flex:0 0 auto;font-size:10.5px;font-weight:800;border-radius:999px;padding:2px 8px;margin-top:1px;background:var(--surface2);border:1px solid var(--line);color:var(--ink)}
+  .q-warn{background:#FDECEC;color:#8A2B2B;border-color:#F0B4B4}
+  @media (prefers-color-scheme: dark){.q-warn{background:#3A2020;color:#F0B4B4;border-color:#5A3030}}
+  .borderNote{display:none;margin-top:12px;background:var(--warm-bg);border:1px solid var(--line);border-radius:12px;padding:10px 12px;font-size:12.5px;line-height:1.65}
+  .borderNote.show{display:block}
+  @media(max-width:820px){
+    .hero,.main,.resultTop{grid-template-columns:1fr}
+    .hero{padding-top:22px}
+    .previewBox img{height:320px}
+    .cols{grid-template-columns:1fr}
+    .diagGrid{grid-template-columns:1fr 1fr 1fr;gap:8px}
+    .diag b{font-size:13px}
+    .palette{grid-template-columns:repeat(2,1fr)}
+  }
+  @media(max-width:420px){.diagGrid{grid-template-columns:1fr} .duo div{min-height:104px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="hero">
+    <div>
+      <div class="kicker"><i></i> Personal Color Diagnosis</div>
+      <h1>写真1枚で、<br><span class="warm">イエベ</span> / <span class="cool">ブルベ</span><br>を判定する。</h1>
+      <p class="lead">顔写真をアップロードするだけ。額・両頬・あごの肌を部位別に測り、<strong>照明の色かぶりを補正</strong>してから、色の標準規格 <strong>Lab色空間</strong>で黄み・青みを判定し、4シーズンまで診断します。<strong>最大3枚</strong>の写真を平均すると、さらに安定します。写真は端末の中だけで解析され、外部に送信されません。</p>
+    </div>
+    <div class="hero-visual">
+      <div class="face-card">
+        <div class="duo">
+          <div class="w"><span>WARM / イエベ</span><div><b>春 ・ 秋</b><small>黄みのある肌<br>ゴールドが映える</small></div></div>
+          <div class="c"><span>COOL / ブルベ</span><div><b>夏 ・ 冬</b><small>青み・ピンクみのある肌<br>シルバーが映える</small></div></div>
+        </div>
+        <div class="hero-note"><span class="chip">✓ 質問なし・写真だけ</span><span class="chip">✓ 照明補正つき</span><span class="chip">✓ Lab色空間で測定</span><span class="chip">✓ 最大3枚で精度UP</span></div>
+      </div>
+    </div>
+  </header>
+
+  <div class="main">
+    <!-- Upload -->
+    <section class="card" id="uploadCard">
+      <h2>顔写真を選んでください</h2>
+      <p class="sub">正面を向いた顔が大きく写っている写真がおすすめです。自撮りでも、カメラで撮った写真でもOKです。</p>
+
+      <div class="drop" id="dropZone" role="button" tabindex="0" aria-label="写真を選択する">
+        <div class="drop-inner" id="dropInner">
+          <div id="emptyState">
+            <div class="upload-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 16V4m0 0l-4 4m4-4l4 4"/><path d="M4 16v3a1 1 0 001 1h14a1 1 0 001-1v-3"/></svg></div>
+            <b>タップして写真を選ぶ</b>
+            <p>またはここに画像をドラッグ＆ドロップ<br>JPG / PNG / HEICなど、スマホの写真でOK</p>
+            <div style="margin-top:16px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
+              <span class="chip">📷 カメラで撮る</span><span class="chip">🖼 アルバムから選ぶ</span>
+            </div>
+          </div>
+          <div id="previewWrap">
+            <div class="previewBox" id="previewBox">
+              <img id="previewImg" alt="アップロードした顔写真のプレビュー">
+              <div class="face-guide"><span></span></div>
+              <div class="scan"></div>
+            </div>
+            <div class="fileMeta"><span id="fileName">—</span><span>楕円の中に顔が入ると精度が上がります</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="thumbs" id="thumbs" aria-label="選択中の写真一覧"></div>
+      <div class="actions" style="margin-top:10px">
+        <button class="btn btn-ghost btn-small" id="addBtn" style="display:none">＋ 写真を追加する（最大3枚）</button>
+        <span class="addHint" id="addHint" style="display:none">別の照明・別の日で撮った写真を足すと、色かぶりの影響が平均化されて精度が上がります。</span>
+      </div>
+      <div id="errorBox" style="display:none;margin-top:12px;background:#FDECEC;border:1px solid #F0B4B4;color:#7A1F1F;border-radius:12px;padding:12px 14px;font-size:13.5px;font-weight:700"></div>
+
+      <div class="progress" id="progress"><span class="spinner"></span><span id="progressText">肌の色を読み取っています…</span></div>
+
+      <div class="actions">
+        <button class="btn btn-primary" id="analyzeBtn" disabled>この写真で判定する →</button>
+        <button class="btn btn-ghost" id="changeBtn" style="display:none">別の写真にする</button>
+      </div>
+      <p class="note">※ 照明やフィルターで結果は変わります。白い壁の前・自然光・ノーメイクに近い写真ほど正確です。照明の違う写真を2〜3枚足すと平均化されてさらに安定します。本診断は目安であり、プロの対面診断の代わりではありません。</p>
+    </section>
+
+    <!-- Side -->
+    <aside style="display:grid;gap:18px">
+      <section class="card">
+        <h2 style="font-size:19px">判定のしくみ</h2>
+        <div class="steps">
+          <div class="step"><span class="num">1</span><div><b>顔を検出して部位別に測る</b><p>目・口・髪を避け、額と両頬・あご・鼻まわりの肌だけを部位ごとにサンプリングします。</p></div></div>
+          <div class="step"><span class="num">2</span><div><b>照明の色かぶりを補正</b><p>蛍光灯の青み・電球の黄みなど、写真全体の色の偏りを推定して打ち消してから測ります。</p></div></div>
+          <div class="step"><span class="num">3</span><div><b>Lab色空間で測定</b><p>RGBではなく人の目に沿ったLab色空間で、黄み⇄青みの軸（b*）・明るさ（L*）・鮮やかさ（C*）を測ります。</p></div></div>
+          <div class="step"><span class="num">4</span><div><b>外れ値を除去</b><p>影・白とび・チークなど偏ったピクセルを中央値とtrimmed平均で除外し、部位同士が食い違えばその部位を外します。</p></div></div>
+          <div class="step"><span class="num">5</span><div><b>確率で分類し、信頼度も出す</b><p>4シーズンそれぞれへの近さを確率で表示。中間寄りならその旨と次点も正直に伝えます。</p></div></div>
+        </div>
+        <div class="meterLabels"><span>● ブルベ（青み）</span><span>イエベ（黄み）●</span></div>
+        <div class="spectrum"><i id="spectrumDot" style="left:50%"></i></div>
+        <p style="font-size:12px;color:var(--muted);margin:8px 0 0">判定すると、あなたの位置がこのライン上に表示されます。</p>
+      </section>
+
+      <section class="card">
+        <h2 style="font-size:19px">正確に撮るコツ</h2>
+        <ul class="tips">
+          <li>窓辺などの自然光で、顔に影が入らないように撮る</li>
+          <li>美肌フィルター・色補正アプリはOFFにする</li>
+          <li>ファンデーションは薄め、またはノーメイクが理想</li>
+          <li>白い壁を背景にすると、色かぶりを防げる</li>
+          <li>髪で顔が隠れず、額と頬が見えている写真を選ぶ</li>
+        </ul>
+      </section>
+    </aside>
+  </div>
+
+  <!-- Result -->
+  <section id="result">
+    <div class="resultTop">
+      <div class="resultHero" id="resultHero">
+        <div class="label" id="resultEn">—</div>
+        <h2 id="resultTitle">—</h2>
+        <p id="resultDesc">—</p>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:14px" id="resultTags"></div>
+      </div>
+      <div class="card">
+        <h3>あなたの肌色サンプル</h3>
+        <div class="sampleBox">
+          <div class="skinChip" id="skinChip"></div>
+          <div><b id="skinHex" style="font-size:18px">—</b><p style="margin:2px 0 0;color:var(--muted);font-size:13px" id="skinNote">写真から抽出した平均の肌色です</p></div>
+        </div>
+        <div class="diagGrid">
+          <div class="diag"><span>黄み ⇄ 青み</span><b id="diagTone">—</b><div class="bar"><i id="barTone" style="width:50%"></i></div></div>
+          <div class="diag"><span>明るさ</span><b id="diagLight">—</b><div class="bar"><i id="barLight" style="width:50%"></i></div></div>
+          <div class="diag"><span>鮮やかさ</span><b id="diagSat">—</b><div class="bar"><i id="barSat" style="width:50%"></i></div></div>
+        </div>
+        <div class="confHead"><span class="confTitle">判定の信頼度</span><b id="confVal">—</b><span id="confLabel" style="font-size:12.5px;color:var(--muted)"></span></div>
+        <div class="confBar"><i id="confBar" style="width:0%"></i></div>
+        <div class="seasonBars" id="seasonBars"></div>
+        <div class="borderNote" id="borderNote"></div>
+        <h3 style="margin-top:16px">写真の品質チェック</h3>
+        <ul class="quality" id="qualityList"></ul>
+        <div class="actions" style="margin-top:16px">
+          <button class="btn btn-ghost btn-small" onclick="document.getElementById('uploadCard').scrollIntoView({behavior:'smooth'})">↑ もう一度判定する</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:18px">
+      <h2>あなたに似合う色</h2>
+      <p class="sub" id="paletteSub">—</p>
+      <div class="palette" id="palette"></div>
+
+      <div class="cols">
+        <div class="mini"><h4>💄 メイク</h4><ul id="makeupList"></ul></div>
+        <div class="mini"><h4>👗 ファッション・小物</h4><ul id="fashionList"></ul></div>
+        <div class="mini"><h4>苦手になりやすい色</h4><div class="avoid" id="avoidList"></div><p style="font-size:12.5px;color:var(--muted);margin:8px 0 0" id="avoidText"></p></div>
+      </div>
+    </div>
+  </section>
+
+  <p style="text-align:center;color:var(--muted);font-size:12px;margin-top:28px">写真はあなたの端末の中だけで処理されます。サーバーへ送信・保存されることはありません。</p>
+</div>
+
+<canvas class="hiddenCanvas" id="workCanvas" width="400" height="400"></canvas>
+
+<script>
+(function(){
+  var dropZone=document.getElementById('dropZone');
+  var errorBox=document.getElementById('errorBox');
+  function showError(msg){ errorBox.textContent=msg; errorBox.style.display='block'; }
+  function hideError(){ errorBox.style.display='none'; }
+
+  var dropInner=document.getElementById('dropInner');
+  var emptyState=document.getElementById('emptyState');
+  var previewWrap=document.getElementById('previewWrap');
+  var previewImg=document.getElementById('previewImg');
+  var previewBox=document.getElementById('previewBox');
+  var fileNameEl=document.getElementById('fileName');
+  var analyzeBtn=document.getElementById('analyzeBtn');
+  var changeBtn=document.getElementById('changeBtn');
+  var addBtn=document.getElementById('addBtn');
+  var addHint=document.getElementById('addHint');
+  var thumbsEl=document.getElementById('thumbs');
+  var progress=document.getElementById('progress');
+  var progressText=document.getElementById('progressText');
+  var result=document.getElementById('result');
+  var spectrumDot=document.getElementById('spectrumDot');
+
+  var MAX_PHOTOS=3;
+  var photos=[]; // {url, img, name}
+  var activeIdx=0;
+
+  function openPicker(){
+    hideError();
+    var input=document.createElement('input');
+    input.type='file'; input.accept='image/*'; input.multiple=true;
+    input.style.display='none';
+    document.body.appendChild(input);
+    input.addEventListener('change',function(){
+      if(input.files && input.files.length) handleFiles(input.files);
+      document.body.removeChild(input);
+    });
+    input.click();
+  }
+
+  var TYPES={
+    spring:{key:'spring',title:'イエベ春',en:'YELLOW BASE — SPRING / Bright Warm',heroClass:'type-spring',desc:'黄みのある明るい肌が特徴の、フレッシュで華やかなタイプ。明るく鮮やかな色で顔まわりがパッと明るく見えます。コーラルやピーチなど、温かくクリアな色が得意です。',tags:['イエベ','明るい','鮮やか','ゴールド◎'],paletteSub:'イエベ春は「明るく・黄み・クリア」な色がベスト。アイボリーをベースに、ビタミンカラーを顔まわりに。',palette:[['#FFF3D6','アイボリー','ベースカラー'],['#FFB59E','コーラルピーチ','チーク・リップ'],['#FF8A5B','アプリコット','トップス'],['#FFD23F','カナリアイエロー','差し色'],['#7ED3B2','ミントグリーン','ニット'],['#4ECDC4','ターコイズ','アクセサリー'],['#FF6B81','コーラルピンク','リップ'],['#C68642','キャメル','バッグ・靴']],makeup:['ファンデはイエローベージュ／オークル寄りの明るめ','リップはコーラル・オレンジ・ピーチ系','チークはアプリコットやコーラルで血色感を','アイシャドウはゴールド・オレンジブラウン'],fashion:['アクセサリーはゴールドが圧勝','白は真っ白よりアイボリー・生成り','髪色は明るめのハニー／ゴールデンブラウン'],avoid:[['#7A9AB8','くすみブルー'],['#8A7FB8','青みラベンダー'],['#2B2B2B','真っ黒']],avoidText:'青みの強いくすみ色や真っ黒は、顔が疲れて見えやすいので面積を小さく。'},
+    summer:{key:'summer',title:'ブルベ夏',en:'BLUE BASE — SUMMER / Soft Cool',heroClass:'type-summer',desc:'青みのある柔らかな肌が特徴の、エレガントで涼しげなタイプ。スモーキーで優しい色が肌の透明感を引き立てます。パステルやくすみカラーが最も似合います。',tags:['ブルベ','明るい','ソフト','シルバー◎'],paletteSub:'ブルベ夏は「明るく・青み・ソフト」な色がベスト。グレーを少し混ぜたような、優しい色を選んで。',palette:[['#F2F4F8','オフホワイト','ベースカラー'],['#A8C3E0','スモーキーブルー','シャツ'],['#D8A7B1','ローズピンク','チーク・リップ'],['#B8A9D1','ラベンダー','トップス'],['#A8C8B8','セージグリーン','ニット'],['#E8C4C4','スモーキーピンク','ワンピース'],['#8FA8C8','ブルーグレー','ボトムス'],['#C9CED6','ライトグレー','アウター']],makeup:['ファンデはピンクベージュ／青み寄りの明るめ','リップはローズ・ベリーピンク・モーヴ系','チークは青みピンクで透明感をプラス','アイシャドウはグレージュ・ラベンダー・ピンクブラウン'],fashion:['アクセサリーはシルバー／プラチナが映える','白はオフホワイト・ソフトホワイト','髪色はアッシュ・グレージュ・ラベンダーブラウン'],avoid:[['#E67E22','鮮やかオレンジ'],['#D4A017','マスタード'],['#6B4A1F','濃いブラウン']],avoidText:'黄みの強いオレンジやマスタードは肌がくすんで見えやすいので注意。'},
+    autumn:{key:'autumn',title:'イエベ秋',en:'YELLOW BASE — AUTUMN / Deep Warm',heroClass:'type-autumn',desc:'黄みのある落ち着いた肌が特徴の、シックで大人っぽいタイプ。深みのあるアースカラーやこっくりした色で、肌にツヤと立体感が出ます。',tags:['イエベ','深み','落ち着いた','ゴールド◎'],paletteSub:'イエベ秋は「深く・黄み・くすみ」な色がベスト。テラコッタやオリーブなど、自然の色が肌になじみます。',palette:[['#F5E6CC','エクリュ','ベースカラー'],['#C96F3B','テラコッタ','トップス'],['#8A8B4A','オリーブ','ボトムス'],['#D9A441','マスタード','差し色'],['#7A3B2E','ブリックレッド','リップ'],['#5C4033','ダークブラウン','アウター'],['#B85C38','バーントオレンジ','ニット'],['#4A6741','フォレストグリーン','ジャケット']],makeup:['ファンデはオークル／イエローベージュの標準〜やや深め','リップはテラコッタ・ブラウンレッド・レンガ色','チークはオレンジブラウン・ベージュ系','アイシャドウはカーキ・ゴールドブラウン・ブロンズ'],fashion:['アクセサリーはゴールド（マットな質感も◎）','白は生成り・クリーム色を選ぶ','髪色はダークブラウン・オリーブ・カッパー系'],avoid:[['#FF8FAB','青みピンク'],['#A8C3E0','パステルブルー'],['#E6E6FA','ラベンダー']],avoidText:'青みの強いパステルは浮きやすいので、顔から離して使うのがおすすめ。'},
+    winter:{key:'winter',title:'ブルベ冬',en:'BLUE BASE — WINTER / Vivid Cool',heroClass:'type-winter',desc:'青みのある肌とコントラストが特徴の、シャープで華やかなタイプ。鮮やかでクリアな色や、黒・白のモノトーンが肌の透明感と存在感を引き立てます。',tags:['ブルベ','鮮やか','コントラスト','シルバー◎'],paletteSub:'ブルベ冬は「鮮やか・青み・クリア」な色がベスト。くすみのない、はっきりした色を選んで。',palette:[['#FFFFFF','ピュアホワイト','ベースカラー'],['#111111','ブラック','アウター'],['#E91E63','フューシャピンク','リップ・差し色'],['#304FFE','ロイヤルブルー','トップス'],['#B71C1C','ワインレッド','ワンピース'],['#00897B','エメラルド','ニット'],['#7B1FA2','パープル','小物'],['#FFEB3B','レモンイエロー','差し色']],makeup:['ファンデはピンクベージュ／青みの標準色','リップはフューシャ・ワイン・青みレッド','チークは青みピンク〜ローズを薄くシャープに','アイシャドウはグレー・ネイビー・シルバー系'],fashion:['アクセサリーはシルバー／プラチナ・キラキラ系','白は真っ白（ピュアホワイト）が一番似合う','髪色は黒髪・ブルーブラック・アッシュダーク'],avoid:[['#D9A441','マスタード'],['#C68642','キャメル'],['#F5E6CC','ベージュ']],avoidText:'黄みの強いベージュやキャメルは顔がぼやけやすいので、顔まわりは避けて。'}
+  };
+
+  /* ---------- photo management ---------- */
+  function handleFiles(fileList){
+    hideError();
+    var files=Array.prototype.slice.call(fileList);
+    var added=0;
+    files.forEach(function(file){
+      if(!file || !/^image\//.test(file.type||'')){ return; }
+      if(photos.length>=MAX_PHOTOS){ showError('写真は最大'+MAX_PHOTOS+'枚までです。サムネイルの×で減らしてから追加してください。'); return; }
+      var url=URL.createObjectURL(file);
+      var img=new Image();
+      img.onload=function(){
+        photos.push({url:url,img:img,name:file.name||'撮影した写真'});
+        activeIdx=photos.length-1;
+        syncPhotoUI();
+      };
+      img.onerror=function(){ showError('その画像は読み込めませんでした。別の写真でお試しください。'); };
+      img.src=url;
+      added++;
+    });
+    if(added===0 && files.length){ showError('画像ファイルを選んでください。'); }
+  }
+
+  function syncPhotoUI(){
+    if(photos.length===0){
+      emptyState.style.display='';
+      previewWrap.classList.remove('show');
+      dropZone.classList.remove('has-photo');
+      dropInner.classList.remove('has-photo');
+      analyzeBtn.disabled=true;
+      changeBtn.style.display='none';
+      addBtn.style.display='none';
+      addHint.style.display='none';
+      thumbsEl.classList.remove('show');
+      thumbsEl.innerHTML='';
+      return;
+    }
+    var p=photos[activeIdx];
+    previewImg.src=p.url;
+    fileNameEl.textContent=p.name+(photos.length>1?'（'+(activeIdx+1)+' / '+photos.length+'枚目）':'');
+    emptyState.style.display='none';
+    previewWrap.classList.add('show');
+    dropZone.classList.add('has-photo');
+    dropInner.classList.add('has-photo');
+    analyzeBtn.disabled=false;
+    analyzeBtn.textContent=photos.length>1?(photos.length+'枚の平均で判定する →'):'この写真で判定する →';
+    changeBtn.style.display='inline-flex';
+    addBtn.style.display=photos.length<MAX_PHOTOS?'inline-flex':'none';
+    addHint.style.display=photos.length<MAX_PHOTOS?'inline':'none';
+    result.classList.remove('show');
+    // thumbnails
+    thumbsEl.innerHTML='';
+    photos.forEach(function(ph,i){
+      var b=document.createElement('button');
+      b.type='button';
+      b.className='thumb'+(i===activeIdx?' active':'');
+      b.setAttribute('aria-label',(i+1)+'枚目の写真を表示');
+      var im=document.createElement('img'); im.src=ph.url; im.alt='';
+      var rm=document.createElement('span');
+      rm.className='rm'; rm.textContent='×'; rm.setAttribute('aria-label','この写真を外す');
+      rm.addEventListener('click',function(e){
+        e.stopPropagation();
+        photos.splice(i,1);
+        if(activeIdx>=photos.length) activeIdx=Math.max(0,photos.length-1);
+        syncPhotoUI();
+      });
+      b.appendChild(im); b.appendChild(rm);
+      b.addEventListener('click',function(){ activeIdx=i; syncPhotoUI(); });
+      thumbsEl.appendChild(b);
+    });
+    thumbsEl.classList.toggle('show',photos.length>1);
+  }
+
+  dropZone.addEventListener('click',function(e){ if(previewWrap.classList.contains('show') && e.target.closest('#previewWrap')) return; openPicker(); });
+  dropZone.addEventListener('keydown',function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); openPicker(); } });
+  changeBtn.addEventListener('click',function(e){ e.preventDefault(); photos=[]; activeIdx=0; syncPhotoUI(); openPicker(); });
+  addBtn.addEventListener('click',function(e){ e.preventDefault(); openPicker(); });
+  ['dragenter','dragover'].forEach(function(ev){ dropZone.addEventListener(ev,function(e){e.preventDefault();dropZone.classList.add('drag')}) });
+  ['dragleave','drop'].forEach(function(ev){ dropZone.addEventListener(ev,function(e){e.preventDefault();dropZone.classList.remove('drag')}) });
+  dropZone.addEventListener('drop',function(e){ var f=e.dataTransfer.files; if(f && f.length) handleFiles(f); });
+
+  /* ---------- color science ---------- */
+  function clamp(v,lo,hi){ return Math.max(lo,Math.min(hi,v)); }
+  function median(arr){
+    if(!arr.length) return 0;
+    var a=arr.slice().sort(function(x,y){return x-y});
+    var m=a.length>>1;
+    return a.length%2? a[m] : (a[m-1]+a[m])/2;
+  }
+  function srgbToLinear(c){ c/=255; return c<=0.04045? c/12.92 : Math.pow((c+0.055)/1.055,2.4); }
+  // sRGB -> CIE Lab (D65). Returns [L,a,b]
+  function rgbToLab(r,g,b){
+    var R=srgbToLinear(r),G=srgbToLinear(g),B=srgbToLinear(b);
+    var X=(0.4124*R+0.3576*G+0.1805*B)/0.95047;
+    var Y=(0.2126*R+0.7152*G+0.0722*B)/1.0;
+    var Z=(0.0193*R+0.1192*G+0.9505*B)/1.08883;
+    function f(t){ return t>0.008856? Math.cbrt(t) : (7.787*t+16/116); }
+    var fx=f(X),fy=f(Y),fz=f(Z);
+    return [116*fy-16, 500*(fx-fy), 200*(fy-fz)];
+  }
+  function isSkinPx(r,g,b){
+    var max=Math.max(r,g,b),min=Math.min(r,g,b);
+    if(r<70||r>253) return false;
+    if(!(r>g&&r>b)) return false;
+    if((r-g)<10||(r-b)<15) return false;
+    var d=max-min;
+    if(d<15||d>120) return false;
+    // YCbCr skin locus
+    var cb=128-0.168736*r-0.331264*g+0.5*b;
+    var cr=128+0.5*r-0.418688*g-0.081312*b;
+    if(cb<77||cb>140||cr<130||cr>182) return false;
+    return true;
+  }
+
+  /* ---------- face detection ---------- */
+  function detectFace(img){
+    if(!('FaceDetector' in window)) return Promise.resolve(null);
+    try{
+      var fd=new FaceDetector({fastMode:true,maxDetectedFaces:1});
+      return fd.detect(img).then(function(faces){
+        if(faces && faces.length && faces[0].boundingBox){
+          var bb=faces[0].boundingBox;
+          return {x:bb.x,y:bb.y,w:bb.width,h:bb.height};
+        }
+        return null;
+      }).catch(function(){ return null; });
+    }catch(e){ return Promise.resolve(null); }
+  }
+
+  /* Estimate a face box from the skin-pixel distribution (fallback) */
+  function estimateFaceBox(data,W,H){
+    var xs=[],ys=[];
+    for(var y=0;y<H;y+=4){
+      for(var x=0;x<W;x+=4){
+        var idx=(y*W+x)*4;
+        if(isSkinPx(data[idx],data[idx+1],data[idx+2])){ xs.push(x); ys.push(y); }
+      }
+    }
+    if(xs.length<300) return null;
+    xs.sort(function(a,b){return a-b}); ys.sort(function(a,b){return a-b});
+    function pct(a,p){ return a[Math.floor(a.length*p)]; }
+    var x0=pct(xs,0.06),x1=pct(xs,0.94),y0=pct(ys,0.03),y1=pct(ys,0.97);
+    var w=x1-x0,h=y1-y0;
+    if(w<W*0.08||h<H*0.08||w>W*0.92||h>H*0.98) return null;
+    // expand a little: skin bbox misses forehead top / hairline
+    var ex=w*0.10, ey=h*0.14;
+    return {x:Math.max(0,x0-ex), y:Math.max(0,y0-ey), w:Math.min(W,x1+ex)-Math.max(0,x0-ex), h:Math.min(H,y1+ey*0.4)-Math.max(0,y0-ey)};
+  }
+
+  /* White balance: estimate illuminant from near-neutral bright pixels
+     (walls, shirts, sclera), fall back to a clamped gray-world estimate. */
+  function estimateWhiteBalance(data,W,H){
+    var nR=0,nG=0,nB=0,nC=0;
+    var gR=0,gG=0,gB=0,gC=0;
+    for(var i=0;i<data.length;i+=16){
+      var r=data[i],g=data[i+1],b=data[i+2];
+      var max=Math.max(r,g,b),min=Math.min(r,g,b);
+      var lum=0.299*r+0.587*g+0.114*b;
+      if(lum>150 && (max-min)<20){ nR+=r;nG+=g;nB+=b;nC++; }
+      if(lum>40 && lum<235){ gR+=r;gG+=g;gB+=b;gC++; }
+    }
+    var mR,mG,mB,clampAmt;
+    if(nC>=150){ mR=nR/nC;mG=nG/nC;mB=nB/nC;clampAmt=0.30; }
+    else if(gC>0){ mR=gR/gC;mG=gG/gC;mB=gB/gC;clampAmt=0.16; }
+    else return {r:1,g:1,b:1,cast:0};
+    var gray=(mR+mG+mB)/3;
+    var gains={ r:clamp(gray/mR,1-clampAmt,1+clampAmt), g:clamp(gray/mG,1-clampAmt,1+clampAmt), b:clamp(gray/mB,1-clampAmt,1+clampAmt) };
+    gains.cast=Math.max(Math.abs(gains.r-1),Math.abs(gains.g-1),Math.abs(gains.b-1));
+    return gains;
+  }
+
+  /* Blur estimate: Laplacian variance over the face crop (grayscale, 96px) */
+  function blurScore(ctx,W,H,box){
+    var t=document.createElement('canvas'); t.width=96; t.height=96;
+    var tc=t.getContext('2d',{willReadFrequently:true});
+    tc.drawImage(ctx.canvas,box.x,box.y,box.w,box.h,0,0,96,96);
+    var d;
+    try{ d=tc.getImageData(0,0,96,96).data; }catch(e){ return 999; }
+    var gray=[];
+    for(var i=0;i<d.length;i+=4) gray.push(0.299*d[i]+0.587*d[i+1]+0.114*d[i+2]);
+    var sum=0,sum2=0,cnt=0;
+    for(var y=1;y<95;y++){
+      for(var x=1;x<95;x++){
+        var v=4*gray[y*96+x]-gray[y*96+x-1]-gray[y*96+x+1]-gray[(y-1)*96+x]-gray[(y+1)*96+x];
+        sum+=v; sum2+=v*v; cnt++;
+      }
+    }
+    var mean=sum/cnt;
+    return sum2/cnt-mean*mean;
+  }
+
+  /* ---------- per-photo analysis ---------- */
+  var REGIONS=[
+    {id:'forehead',label:'額',    x0:0.32,x1:0.68,y0:0.10,y1:0.26,w:1.0},
+    {id:'cheekL',  label:'左頬',  x0:0.08,x1:0.34,y0:0.50,y1:0.70,w:1.2},
+    {id:'cheekR',  label:'右頬',  x0:0.66,x1:0.92,y0:0.50,y1:0.70,w:1.2},
+    {id:'chin',    label:'あご',  x0:0.36,x1:0.64,y0:0.80,y1:0.95,w:0.7},
+    {id:'nose',    label:'鼻まわり',x0:0.42,x1:0.58,y0:0.38,y1:0.56,w:0.4}
+  ];
+
+  function analyzePhoto(photo,faceBoxNatural){
+    var img=photo.img;
+    var iw=img.naturalWidth, ih=img.naturalHeight;
+    var scale=Math.min(1,640/iw,820/ih);
+    var W=Math.max(2,Math.round(iw*scale)), H=Math.max(2,Math.round(ih*scale));
+    var canvas=document.getElementById('workCanvas');
+    canvas.width=W; canvas.height=H;
+    var ctx=canvas.getContext('2d',{willReadFrequently:true});
+    ctx.drawImage(img,0,0,W,H);
+    var data;
+    try{ data=ctx.getImageData(0,0,W,H).data; }catch(e){ return null; }
+
+    // face box in working coords
+    var box=null, faceSource='推定';
+    if(faceBoxNatural){
+      box={x:faceBoxNatural.x*scale,y:faceBoxNatural.y*scale,w:faceBoxNatural.w*scale,h:faceBoxNatural.h*scale};
+      faceSource='顔検出';
+    }else{
+      box=estimateFaceBox(data,W,H);
+      if(box) faceSource='肌分布から推定';
+    }
+    if(!box){ box={x:W*0.18,y:H*0.05,w:W*0.64,h:H*0.88}; faceSource='中央配置として推定'; }
+    var faceAreaRatio=(box.w*box.h)/(W*H);
+
+    // white balance
+    var wb=estimateWhiteBalance(data,W,H);
+
+    // exposure stats inside face box
+    var blown=0,dark=0,tot=0;
+    for(var fy=Math.max(0,Math.floor(box.y)); fy<Math.min(H,box.y+box.h); fy+=4){
+      for(var fx=Math.max(0,Math.floor(box.x)); fx<Math.min(W,box.x+box.w); fx+=4){
+        var ii=(fy*W+fx)*4;
+        var lum=0.299*data[ii]+0.587*data[ii+1]+0.114*data[ii+2];
+        if(lum>248) blown++;
+        if(lum<18) dark++;
+        tot++;
+      }
+    }
+    var blownRatio=tot? blown/tot:0, darkRatio=tot? dark/tot:0;
+
+    // region sampling with WB correction, median + trimmed mean in Lab
+    var regions=[];
+    var totalSamples=0;
+    REGIONS.forEach(function(rg){
+      var rx0=box.x+box.w*rg.x0, rx1=box.x+box.w*rg.x1;
+      var ry0=box.y+box.h*rg.y0, ry1=box.y+box.h*rg.y1;
+      var labs=[],rgbs=[];
+      for(var y=Math.max(0,Math.floor(ry0)); y<Math.min(H,ry1); y+=2){
+        for(var x=Math.max(0,Math.floor(rx0)); x<Math.min(W,rx1); x+=2){
+          var idx=(y*W+x)*4;
+          var r=data[idx],g=data[idx+1],b=data[idx+2],a=data[idx+3];
+          if(a<200) continue;
+          if(!isSkinPx(r,g,b)) continue;
+          var lum=0.299*r+0.587*g+0.114*b;
+          if(lum<35||lum>246) continue; // deep shadow / blown highlight
+          var cr=clamp(r*wb.r,0,255), cg=clamp(g*wb.g,0,255), cb=clamp(b*wb.b,0,255);
+          labs.push(rgbToLab(cr,cg,cb));
+          rgbs.push([cr,cg,cb]);
+        }
+      }
+      if(labs.length<40) return;
+      var mL=median(labs.map(function(v){return v[0]}));
+      var ma=median(labs.map(function(v){return v[1]}));
+      var mb=median(labs.map(function(v){return v[2]}));
+      // trim outliers (shadow edges, blush, hair strands) then average
+      var sL=0,sa=0,sb=0,sR=0,sG=0,sB=0,kept=0;
+      var bVals=[];
+      for(var k=0;k<labs.length;k++){
+        var dL=labs[k][0]-mL, da=labs[k][1]-ma, db=labs[k][2]-mb;
+        if(Math.sqrt(dL*dL+da*da+db*db)<13){
+          sL+=labs[k][0];sa+=labs[k][1];sb+=labs[k][2];
+          sR+=rgbs[k][0];sG+=rgbs[k][1];sB+=rgbs[k][2];
+          bVals.push(labs[k][2]); kept++;
+        }
+      }
+      if(kept<30) return;
+      var meanB=sb/kept, varB=0;
+      bVals.forEach(function(v){ var dv=v-meanB; varB+=dv*dv; });
+      regions.push({id:rg.id,label:rg.label,L:sL/kept,a:sa/kept,b:sb/kept,
+        r:sR/kept,g:sG/kept,bl:sB/kept,count:kept,stdB:Math.sqrt(varB/kept),w:rg.w*Math.min(1,kept/600)});
+      totalSamples+=kept;
+    });
+    if(regions.length===0||totalSamples<150) return null;
+
+    // weighted combine, then drop a region that disagrees strongly (shadow / makeup patch)
+    function combine(list){
+      var tw=0,L=0,a=0,b=0,R=0,G=0,B=0;
+      list.forEach(function(r){ tw+=r.w; L+=r.L*r.w; a+=r.a*r.w; b+=r.b*r.w; R+=r.r*r.w; G+=r.g*r.w; B+=r.bl*r.w; });
+      return {L:L/tw,a:a/tw,b:b/tw,r:R/tw,g:G/tw,bl:B/tw};
+    }
+    var comb=combine(regions);
+    var keptRegions=regions.filter(function(r){
+      var d=Math.sqrt(Math.pow(r.L-comb.L,2)+Math.pow(r.a-comb.a,2)+Math.pow(r.b-comb.b,2));
+      return d<14;
+    });
+    var droppedRegion=null;
+    if(keptRegions.length>=2 && keptRegions.length<regions.length){
+      droppedRegion=regions.filter(function(r){ return keptRegions.indexOf(r)<0; })[0];
+      comb=combine(keptRegions);
+      regions=keptRegions;
+    }
+
+    // cheek evenness (lighting direction check)
+    var cL=null,cR=null;
+    regions.forEach(function(r){ if(r.id==='cheekL')cL=r; if(r.id==='cheekR')cR=r; });
+    var cheekDiff=(cL&&cR)? Math.abs(cL.L-cR.L): null;
+
+    // hair contrast: dark pixels in the strip just above the forehead
+    var contrast=null;
+    var stripY0=Math.max(0,box.y-box.h*0.38), stripY1=Math.max(0,box.y+box.h*0.04);
+    if(stripY1-stripY0>6){
+      var hSum=0,hCnt=0;
+      for(var hy=Math.floor(stripY0); hy<stripY1; hy+=3){
+        for(var hx=Math.floor(box.x+box.w*0.15); hx<box.x+box.w*0.85; hx+=3){
+          var hi2=(hy*W+hx)*4;
+          var hl=0.299*data[hi2]+0.587*data[hi2+1]+0.114*data[hi2+2];
+          if(hl<75){ hSum+=hl; hCnt++; }
+        }
+      }
+      if(hCnt>60){ contrast=(0.299*comb.r+0.587*comb.g+0.114*comb.bl)-(hSum/hCnt); }
+    }
+
+    var blur=blurScore(ctx,W,H,box);
+    var metrics=computeMetrics(comb.L,comb.a,comb.b,contrast);
+    var conf=computeConfidence({
+      samples:totalSamples, regionCount:regions.length,
+      stdB:regions.reduce(function(s,r){return s+r.stdB},0)/regions.length,
+      cheekDiff:cheekDiff, blown:blownRatio, dark:darkRatio, blur:blur,
+      margin:metrics.margin, warm:metrics.warm, cast:wb.cast
+    });
+    return {
+      L:comb.L,a:comb.a,b:comb.b,r:Math.round(comb.r),g:Math.round(comb.g),bl:Math.round(comb.bl),
+      warm:metrics.warm, probs:metrics.probs, typeKey:metrics.typeKey, margin:metrics.margin,
+      conf:conf, regions:regions.length, samples:totalSamples, dropped:droppedRegion?droppedRegion.label:null,
+      quality:buildQuality({samples:totalSamples,regionCount:regions.length,faceArea:faceAreaRatio,faceSource:faceSource,
+        cheekDiff:cheekDiff,blown:blownRatio,dark:darkRatio,blur:blur,cast:wb.cast,dropped:droppedRegion?droppedRegion.label:null})
+    };
+  }
+
+  function buildQuality(q){
+    var items=[];
+    items.push({ok:q.samples>=1200, text:'肌サンプル '+q.samples.toLocaleString()+' 点を測定（額・頬・あごなど'+q.regionCount+'部位）'});
+    items.push({ok:q.faceArea>=0.08, text:q.faceArea>=0.08?'顔が十分大きく写っています（画面の約'+Math.round(q.faceArea*100)+'%）':'顔が小さめです。顔が画面の1/4以上に写る写真だと安定します'});
+    items.push({ok:q.blown<0.04&&q.dark<0.25, text:(q.blown>=0.04||q.dark>=0.25)?'白とび・黒つぶれが多めです。明るすぎ／暗すぎる写真は避けてください':'露出は適正です（白とび・黒つぶれはわずか）'});
+    if(q.cheekDiff===null){ items.push({ok:false,text:'左右の頬を比べられませんでした。正面の写真がおすすめです'}); }
+    else items.push({ok:q.cheekDiff<=8, text:q.cheekDiff<=8?'左右の頬の明るさが揃っています（片側だけの影が少ない）':'左右の頬で明るさに差があります。顔の片側に影が落ちている可能性があります'});
+    items.push({ok:q.blur>=40, text:q.blur>=40?'輪郭がシャープで、ぶれの影響は小さいです':'少しぶれ／ピンボケ気味です。静止して撮った写真がおすすめです'});
+    items.push({ok:true, text:q.cast>0.05?('照明の色かぶりを約'+Math.round(q.cast*100)+'%補正しました'):'照明の色かぶりはほとんどありませんでした'});
+    if(q.dropped) items.push({ok:false,text:'「'+q.dropped+'」の色が他部位と大きく違ったため、影やメイクの影響とみて除外しました'});
+    items.push({ok:true,text:'顔の位置：'+q.faceSource});
+    return items;
+  }
+
+  /* ---------- classification in Lab space ---------- */
+  var PROTO={
+    spring:{L:67,b:21,C:27},
+    summer:{L:66,b:13,C:16},
+    autumn:{L:55,b:20,C:21},
+    winter:{L:61,b:12,C:26}
+  };
+  function computeMetrics(L,a,b,contrast){
+    var C=Math.sqrt(a*a+b*b);
+    var hab=Math.atan2(b,a)*180/Math.PI; if(hab<0)hab+=360;
+    // undertone 0..100 (0=blue,100=yellow): b* axis + hue angle
+    var bScore=clamp((b-8)/16*100,0,100);
+    var hScore=clamp((hab-38)/26*100,0,100);
+    var warm=bScore*0.6+hScore*0.4;
+    var raw={},sum=0;
+    ['spring','summer','autumn','winter'].forEach(function(k){
+      var p=PROTO[k];
+      var d=Math.sqrt(Math.pow((L-p.L)/9,2)+Math.pow((b-p.b)/5.5,2)+Math.pow((C-p.C)/7,2));
+      raw[k]=Math.exp(-d*1.15); sum+=raw[k];
+    });
+    // contrast tie-break: strong hair/skin contrast favours winter, soft favours summer
+    if(contrast!==null&&contrast!==undefined){
+      raw.winter*=1+Math.max(0,contrast-28)/60;
+      raw.summer*=1+Math.max(0,20-contrast)/80;
+      raw.autumn*=1+Math.max(0,contrast-20)/140;
+      sum=raw.spring+raw.summer+raw.autumn+raw.winter;
+    }
+    var probs={},best=null,bestP=-1,secondP=-1;
+    Object.keys(raw).forEach(function(k){
+      probs[k]=raw[k]/sum*100;
+      if(probs[k]>bestP){ secondP=bestP; bestP=probs[k]; best=k; }
+      else if(probs[k]>secondP){ secondP=probs[k]; }
+    });
+    return {warm:warm,probs:probs,typeKey:best,margin:bestP-secondP,C:C,hab:hab};
+  }
+
+  function computeConfidence(f){
+    var c=55;
+    if(f.samples>=3000)c+=12; else if(f.samples>=1500)c+=8; else if(f.samples>=600)c+=4; else c-=8;
+    if(f.regionCount>=4)c+=8; else if(f.regionCount===3)c+=4; else if(f.regionCount===2)c-=4; else c-=12;
+    if(f.stdB<=3)c+=8; else if(f.stdB<=5)c+=4; else if(f.stdB>8)c-=8;
+    if(f.cheekDiff===null)c-=4; else if(f.cheekDiff<=4)c+=6; else if(f.cheekDiff<=8)c+=2; else if(f.cheekDiff>12)c-=8;
+    if(f.blown>=0.04||f.dark>=0.25)c-=6;
+    if(f.blur<40)c-=6; else c+=4;
+    if(f.cast>0.22)c-=5;
+    if(f.margin>=30)c+=8; else if(f.margin>=15)c+=4; else if(f.margin<8)c-=8;
+    if(f.warm>44&&f.warm<56)c-=6;
+    return Math.round(clamp(c,30,97));
+  }
+
+  /* ---------- aggregate multiple photos ---------- */
+  function aggregate(results){
+    if(results.length===1) return results[0];
+    // drop a photo whose b* is a strong outlier vs the median
+    var bs=results.map(function(r){return r.b;});
+    var medB=median(bs);
+    var kept=results.filter(function(r){ return Math.abs(r.b-medB)<=6; });
+    var droppedNote=null;
+    if(kept.length>=1 && kept.length<results.length){ droppedNote=(results.length-kept.length)+'枚の写真が他と大きく違う色味だったため、平均から外しました'; results=kept; }
+    var tw=0,L=0,a=0,b=0,R=0,G=0,B=0,warm=0;
+    var probs={spring:0,summer:0,autumn:0,winter:0};
+    results.forEach(function(r){
+      var w=Math.max(0.3,r.conf/100); tw+=w;
+      L+=r.L*w; a+=r.a*w; b+=r.b*w; R+=r.r*w; G+=r.g*w; B+=r.bl*w; warm+=r.warm*w;
+      Object.keys(probs).forEach(function(k){ probs[k]+=r.probs[k]*w; });
+    });
+    L/=tw;a/=tw;b/=tw;
+    Object.keys(probs).forEach(function(k){ probs[k]/=tw; });
+    var best=null,bestP=-1,secondP=-1;
+    Object.keys(probs).forEach(function(k){ if(probs[k]>bestP){secondP=bestP;bestP=probs[k];best=k;} else if(probs[k]>secondP){secondP=probs[k];} });
+    // confidence of the aggregate: best single + bonus for agreement
+    var bestConf=Math.max.apply(null,results.map(function(r){return r.conf;}));
+    var bonus=results.length>1? Math.min(8,(results.length-1)*4):0;
+    var src=results.slice().sort(function(x,y){return y.conf-x.conf})[0];
+    return {L:L,a:a,b:b,r:Math.round(R/tw),g:Math.round(G/tw),bl:Math.round(B/tw),
+      warm:warm/tw,probs:probs,typeKey:best,margin:bestP-secondP,
+      conf:Math.round(clamp(bestConf+bonus,30,97)),regions:src.regions,samples:results.reduce(function(s,r){return s+r.samples;},0),
+      quality:src.quality,multiCount:results.length,droppedNote:droppedNote};
+  }
+
+  /* ---------- render ---------- */
+  function render(res){
+    var t=TYPES[res.typeKey];
+    var hero=document.getElementById('resultHero');
+    hero.className='resultHero '+t.heroClass;
+    document.getElementById('resultEn').textContent=t.en;
+    document.getElementById('resultTitle').textContent='あなたは「'+t.title+'」タイプ';
+    document.getElementById('resultDesc').textContent=t.desc;
+    document.getElementById('resultTags').innerHTML=t.tags.map(function(x){return '<span style="background:rgba(255,255,255,.22);border:1px solid rgba(255,255,255,.45);padding:6px 10px;border-radius:999px;font-size:12px;font-weight:800">'+x+'</span>'}).join('');
+    var hex='#'+[res.r,res.g,res.bl].map(function(v){return clamp(Math.round(v),0,255).toString(16).padStart(2,'0')}).join('').toUpperCase();
+    document.getElementById('skinChip').style.background=hex;
+    document.getElementById('skinHex').textContent=hex;
+    document.getElementById('skinNote').textContent=(res.multiCount&&res.multiCount>1)
+      ? res.multiCount+'枚の写真の平均です（照明補正・部位別の測定後）'
+      :'額・両頬・あごなど'+res.regions+'部位から、照明補正をして抽出した肌色です';
+    // diagnostics (Lab-based)
+    document.getElementById('diagTone').textContent=res.warm>=50?('イエベ寄り '+Math.round(res.warm)+'%'):('ブルベ寄り '+Math.round(100-res.warm)+'%');
+    document.getElementById('barTone').style.width=res.warm+'%';
+    document.getElementById('barTone').style.background=res.warm>=50?'var(--warm)':'var(--cool)';
+    var Lpct=Math.round(res.L);
+    document.getElementById('diagLight').textContent=(Lpct>64?'明るめ':(Lpct<52?'深め':'ふつう'))+'（L* '+Lpct+'）';
+    document.getElementById('barLight').style.width=clamp(Lpct,0,100)+'%';
+    var C=Math.sqrt(res.a*res.a+res.b*res.b);
+    var satPct=Math.round(clamp(C/40*100,0,100));
+    document.getElementById('diagSat').textContent=(C>=24?'鮮やか':(C<=15?'穏やか':'ふつう'))+'（C* '+Math.round(C)+'）';
+    document.getElementById('barSat').style.width=satPct+'%';
+    spectrumDot.style.left=res.warm+'%';
+    // confidence
+    document.getElementById('confVal').textContent=res.conf+'%';
+    document.getElementById('confLabel').textContent=res.conf>=80?'信頼度：高い':(res.conf>=60?'信頼度：ふつう':'信頼度：低め — 撮り直すと安定します');
+    document.getElementById('confBar').style.width=res.conf+'%';
+    // season probabilities
+    var order=Object.keys(res.probs).sort(function(x,y){return res.probs[y]-res.probs[x]});
+    document.getElementById('seasonBars').innerHTML=order.map(function(k){
+      var tt=TYPES[k];
+      return '<div class="seasonRow'+(k===res.typeKey?' best':'')+'"><span>'+tt.title+'</span><span class="bar"><i style="width:'+res.probs[k].toFixed(0)+'%;background:'+(k===res.typeKey?'var(--ink)':'var(--line)')+'"></i></span><span>'+res.probs[k].toFixed(0)+'%</span></div>';
+    }).join('');
+    // borderline note
+    var bn=document.getElementById('borderNote');
+    var secondKey=order[1];
+    if(res.warm>43&&res.warm<57){
+      bn.innerHTML='<b>イエベ／ブルベの中間寄りです。</b>黄み・青みの差が小さいため、照明や写真によって結果が揺れやすいタイプです。次点は「'+TYPES[secondKey].title+'」（'+res.probs[secondKey].toFixed(0)+'%）。別の照明で撮った写真を追加すると判定が安定します。';
+      bn.classList.add('show');
+    }else if(res.margin<12){
+      bn.innerHTML='<b>「'+t.title+'」と「'+TYPES[secondKey].title+'」が僅差でした。</b>（差 '+res.margin.toFixed(0)+'ポイント）どちらの色も比較的似合う可能性があります。写真を追加すると判定が安定します。';
+      bn.classList.add('show');
+    }else{ bn.classList.remove('show'); bn.innerHTML=''; }
+    // quality list
+    var qItems=res.quality.slice();
+    if(res.multiCount&&res.multiCount>1) qItems.unshift({ok:true,text:res.multiCount+'枚の写真を平均し、照明の偏りを相殺しました'});
+    if(res.droppedNote) qItems.push({ok:false,text:res.droppedNote});
+    document.getElementById('qualityList').innerHTML=qItems.map(function(q){
+      return '<li><span class="q-badge '+(q.ok?'q-ok':'q-warn')+'">'+(q.ok?'OK':'注意')+'</span><span>'+q.text+'</span></li>';
+    }).join('');
+    // palette etc.
+    document.getElementById('paletteSub').textContent=t.paletteSub;
+    document.getElementById('palette').innerHTML=t.palette.map(function(p){return '<div class="swatch"><i style="background:'+p[0]+'"></i><span>'+p[1]+'<small>'+p[2]+'</small></span></div>'}).join('');
+    document.getElementById('makeupList').innerHTML=t.makeup.map(function(x){return '<li>'+x+'</li>'}).join('');
+    document.getElementById('fashionList').innerHTML=t.fashion.map(function(x){return '<li>'+x+'</li>'}).join('');
+    document.getElementById('avoidList').innerHTML=t.avoid.map(function(a){return '<span style="background:'+a[0]+'" title="'+a[1]+'"></span>'}).join('');
+    document.getElementById('avoidText').textContent=t.avoidText+'（'+t.avoid.map(function(a){return a[1]}).join(' / ')+'）';
+    result.classList.add('show');
+    result.scrollIntoView({behavior:'smooth',block:'start'});
+  }
+
+  analyzeBtn.addEventListener('click',function(){
+    if(!photos.length) return;
+    hideError();
+    analyzeBtn.disabled=true;
+    previewBox.classList.add('scanning');
+    progress.classList.add('show');
+    var steps=['顔の位置を検出しています…','額・両頬・あごの肌を部位別に測っています…','照明の色かぶりを補正しています…','Lab色空間で4シーズンへの近さを計算しています…'];
+    var si=0; progressText.textContent=steps[0];
+    var iv=setInterval(function(){ si=(si+1)%steps.length; progressText.textContent=steps[si]; },700);
+    var jobs=photos.map(function(p){
+      return detectFace(p.img).then(function(box){ return analyzePhoto(p,box); });
+    });
+    Promise.all(jobs).then(function(out){
+      clearInterval(iv);
+      previewBox.classList.remove('scanning');
+      progress.classList.remove('show');
+      analyzeBtn.disabled=false;
+      var ok=out.filter(Boolean);
+      if(!ok.length){ showError('写真から肌色を読み取れませんでした。顔が大きく正面に写った、明るい写真でお試しください。'); return; }
+      render(aggregate(ok));
+    }).catch(function(){
+      clearInterval(iv);
+      previewBox.classList.remove('scanning');
+      progress.classList.remove('show');
+      analyzeBtn.disabled=false;
+      showError('解析中に問題が起きました。別の写真でお試しください。');
+    });
+  });
+})();
+</script>
+
+</body>
+</html>
