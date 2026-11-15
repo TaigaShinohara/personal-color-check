@@ -151,6 +151,17 @@
   @keyframes spin{to{transform:rotate(360deg)}}
   .note{font-size:12px;color:var(--muted);line-height:1.7;margin-top:14px;border-top:1px dashed var(--line);padding-top:12px}
   .hiddenCanvas{display:none}
+  /* Camera */
+  #cameraPanel{display:none;margin-top:14px}
+  #cameraPanel.show{display:block}
+  .camBox{position:relative;border-radius:14px;overflow:hidden;background:#000}
+  .camBox video{width:100%;height:380px;object-fit:cover;display:block}
+  .camBox.mirror video{transform:scaleX(-1)}
+  @media(max-width:820px){.camBox video{height:320px}}
+  /* Reasons (plain-language, main result) */
+  .reasons{margin-top:18px}
+  .reasons h3{font-family:"Shippori Mincho",serif;font-size:19px;margin:0 0 10px}
+  .reasons .check3{margin-bottom:0}
 
   /* Accuracy upgrade: thumbnails, confidence, quality */
   .thumbs{display:none;gap:8px;flex-wrap:wrap;margin-top:12px}
@@ -219,7 +230,7 @@
   <header class="hero">
     <div class="kicker"><i></i> Personal Color Diagnosis</div>
     <h1>写真1枚で、<br><span class="warm">イエベ</span> / <span class="cool">ブルベ</span><br>を判定する。</h1>
-    <p class="lead">顔写真を選ぶだけで、あなたのイエベ／ブルベと似合う色が分かります。写真は<strong>端末の中だけで解析され、外部に送信・保存されることはありません</strong>。</p>
+    <p class="lead">顔写真を<strong>その場で撮る／選ぶ</strong>だけで、あなたのイエベ／ブルベと似合う色が分かります。写真は<strong>端末の中だけで解析され、外部に送信・保存されることはありません</strong>。</p>
     <div class="legend">
       <div class="w"><b>イエベ（春・秋）</b><br>黄みのある肌／ゴールドが映える</div>
       <div class="c"><b>ブルベ（夏・冬）</b><br>青みのある肌／シルバーが映える</div>
@@ -229,8 +240,8 @@
   <div class="main">
     <!-- Upload -->
     <section class="card" id="uploadCard">
-      <h2>顔写真を選んでください</h2>
-      <p class="sub">写真は1枚で判定できます。まず、この3つだけ確認してください。</p>
+      <h2>顔写真を用意してください</h2>
+      <p class="sub">カメラでその場で撮っても、保存済みの写真を選んでもOK。写真は1枚で判定できます。まず、この3つだけ確認してください。</p>
       <ul class="check3">
         <li>窓辺などの自然光で、顔に影が入らないように撮る</li>
         <li>美肌フィルター・色補正はOFFにする</li>
@@ -242,7 +253,7 @@
           <div id="emptyState">
             <div class="upload-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 16V4m0 0l-4 4m4-4l4 4"/><path d="M4 16v3a1 1 0 001 1h14a1 1 0 001-1v-3"/></svg></div>
             <b>タップして写真を選ぶ</b>
-            <p>またはここに画像をドラッグ＆ドロップ<br>JPG / PNG / HEICなど、スマホの写真でOK</p>
+            <p>下の「カメラで撮る」から、その場で撮影もできます<br>またはここに画像をドラッグ＆ドロップ（JPG / PNG / HEICなど）</p>
           </div>
           <div id="previewWrap">
             <div class="previewBox" id="previewBox">
@@ -254,6 +265,27 @@
           </div>
         </div>
       </div>
+      <div class="actions" style="margin-top:12px">
+        <button class="btn btn-primary" id="cameraBtn" style="flex:1">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" aria-hidden="true"><path d="M4 8h3l2-2.5h6L17 8h3a1 1 0 011 1v10a1 1 0 01-1 1H4a1 1 0 01-1-1V9a1 1 0 011-1z"/><circle cx="12" cy="13.5" r="3.6"/></svg>
+          カメラで撮る
+        </button>
+        <button class="btn btn-ghost" id="pickBtn">写真を選ぶ</button>
+      </div>
+
+      <div id="cameraPanel">
+        <div class="camBox mirror" id="camBox">
+          <video id="camVideo" playsinline muted autoplay></video>
+          <div class="face-guide"><span></span></div>
+        </div>
+        <div class="actions">
+          <button class="btn btn-primary" id="shootBtn">撮影する</button>
+          <button class="btn btn-ghost" id="switchCamBtn">前／外カメラ切替</button>
+          <button class="btn btn-ghost" id="closeCamBtn">閉じる</button>
+        </div>
+        <p class="addHint" style="margin-top:8px">明るい場所で、楕円の中に顔を合わせて撮影してください。撮った写真は、選んだ写真と同じ方法でそのまま判定に使えます。カメラの映像も端末の外に送信されません。</p>
+      </div>
+
       <div class="thumbs" id="thumbs" aria-label="選択中の写真一覧"></div>
       <div class="actions" style="margin-top:10px">
         <button class="btn btn-ghost btn-small" id="addBtn" style="display:none">＋ 写真を追加する（最大3枚）</button>
@@ -283,7 +315,7 @@
           <div class="step"><span class="num">4</span><div><b>外れ値を除去</b><p>影・白とび・チークなど偏ったピクセルを中央値とtrimmed平均で除外し、部位同士が食い違えばその部位を外します。</p></div></div>
           <div class="step"><span class="num">5</span><div><b>4シーズンへの近さで分類する</b><p>4シーズンそれぞれへの近さの目安と、判定の安定度（手ごたえスコア）を表示。中間寄りならその旨と次点も正直に伝えます。</p></div></div>
         </div>
-        <p style="font-size:12px;color:var(--muted);margin:10px 0 0">黄み⇄青みの位置は、結果の「判定の根拠と写真の状態」に表示されます。</p>
+        <p style="font-size:12px;color:var(--muted);margin:10px 0 0">黄み⇄青みの位置などの数値は、結果の「くわしい根拠」に表示されます。</p>
       </section>
 
       <section>
@@ -310,6 +342,11 @@
         <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:14px" id="resultTags"></div>
         <p class="cautionLine" id="resultCaution"></p>
       </div>
+    </div>
+    <div class="card reasons" id="reasonsCard">
+      <h3>なぜこの結果になったか</h3>
+      <ul class="check3" id="reasonsList"></ul>
+      <p class="scoreNote" style="margin-bottom:0">写真から実際に測れた色の傾向にもとづく目安です。くわしい数値は、下の「くわしい根拠」にまとめています。</p>
     </div>
     <div class="runner card" id="runnerUp"></div>
     <div class="compareNote" id="compareNote"></div>
@@ -338,7 +375,7 @@
     </div>
 
     <details class="card fold evidence" id="evidence">
-      <summary>判定の根拠と写真の状態</summary>
+      <summary>くわしい根拠（数値・詳細と写真の状態）</summary>
       <div style="margin-top:14px">
         <h3>あなたの肌色サンプル</h3>
         <div class="sampleBox">
@@ -348,7 +385,12 @@
         <div class="diagGrid">
           <div class="diag"><span>黄み ⇄ 青み</span><b id="diagTone">—</b><div class="bar toneBar"><i id="barTone"></i></div><small class="diagNote">肌の色みの向きの目安（マーカーが右ほど黄み寄り）</small></div>
           <div class="diag"><span>明るさ</span><b id="diagLight">—</b><div class="bar"><i id="barLight" style="width:50%"></i></div><small class="diagNote">L*は明るさの指標です（0=暗い〜100=明るい）</small></div>
-          <div class="diag"><span>鮮やかさ</span><b id="diagSat">—</b><div class="bar"><i id="barSat" style="width:50%"></i></div><small class="diagNote">C*は色の鮮明さの指標です（大きいほど鮮やか）</small></div>
+          <div class="diag"><span>鮮やかさ</span><b id="diagSat">—</b><div class="bar"><i id="barSat" style="width:50%"></i></div><small class="diagNote">C*は色の鮮明さの指標です（大きいほど鮮やか／小さいほどくすみ寄り）</small></div>
+        </div>
+        <div class="diagGrid">
+          <div class="diag"><span>血色感（赤み）</span><b id="diagRed">—</b><div class="bar"><i id="barRed" style="width:50%"></i></div><small class="diagNote">a*は赤⇄緑の指標です（大きいほど赤みが強い）</small></div>
+          <div class="diag"><span>部位ごとの均一さ</span><b id="diagEven">—</b><div class="bar"><i id="barEven" style="width:50%"></i></div><small class="diagNote">額・頬・あごなど部位間の色のばらつきから算出（大きいほど均一）</small></div>
+          <div class="diag"><span>照明の色かぶり</span><b id="diagCast">—</b><div class="bar"><i id="barCast" style="width:0%"></i></div><small class="diagNote">撮影時の照明による色の偏りの量。補正してから測定しています</small></div>
         </div>
         <div class="confHead"><span class="confTitle">判定の手ごたえスコア</span><b id="confVal">—</b><span id="confLabel" style="font-size:12.5px;color:var(--muted)"></span></div>
         <div class="confBar"><i id="confBar" style="width:0%"></i></div>
@@ -423,6 +465,90 @@
     });
     input.click();
   }
+
+  /* ---------- camera capture (same pipeline as picked photos) ---------- */
+  var cameraPanel=document.getElementById('cameraPanel');
+  var camBox=document.getElementById('camBox');
+  var camVideo=document.getElementById('camVideo');
+  var camStream=null, camFacing='user';
+
+  function loadPhotoFromUrl(url,name){
+    var img=new Image();
+    img.onload=function(){
+      if(photos.length>=MAX_PHOTOS){ showError('写真は最大'+MAX_PHOTOS+'枚までです。サムネイルの×で減らしてから追加してください。'); return; }
+      photos.push({url:url,img:img,name:name||'カメラで撮影した写真'});
+      activeIdx=photos.length-1;
+      syncPhotoUI();
+    };
+    img.onerror=function(){ showError('撮影した写真を読み込めませんでした。もう一度お試しください。'); };
+    img.src=url;
+  }
+
+  function stopCamera(){
+    if(camStream){ camStream.getTracks().forEach(function(t){ t.stop(); }); camStream=null; }
+    if(camVideo) camVideo.srcObject=null;
+    if(cameraPanel) cameraPanel.classList.remove('show');
+  }
+
+  function startCamera(){
+    hideError();
+    if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){
+      // Fallback: OS camera via file input capture
+      var input=document.createElement('input');
+      input.type='file'; input.accept='image/*'; input.setAttribute('capture', camFacing==='user'?'user':'environment');
+      input.style.display='none';
+      document.body.appendChild(input);
+      input.addEventListener('change',function(){
+        if(input.files && input.files.length) handleFiles(input.files);
+        document.body.removeChild(input);
+      });
+      input.click();
+      return;
+    }
+    stopCamera();
+    navigator.mediaDevices.getUserMedia({video:{facingMode:camFacing},audio:false}).then(function(stream){
+      camStream=stream;
+      camVideo.srcObject=stream;
+      camBox.classList.toggle('mirror', camFacing==='user');
+      cameraPanel.classList.add('show');
+      cameraPanel.scrollIntoView({behavior:'smooth',block:'center'});
+      var p=camVideo.play(); if(p&&p.catch) p.catch(function(){});
+    }).catch(function(){
+      showError('カメラを起動できませんでした（権限が許可されていないか、ブラウザの制限の可能性があります）。「写真を選ぶ」からお試しください。');
+    });
+  }
+
+  function capturePhoto(){
+    if(!camVideo || !camVideo.videoWidth){ showError('カメラの準備ができていません。少し待ってからもう一度お試しください。'); return; }
+    var cv=document.createElement('canvas');
+    cv.width=camVideo.videoWidth; cv.height=camVideo.videoHeight;
+    var cx=cv.getContext('2d');
+    if(camFacing==='user'){ cx.translate(cv.width,0); cx.scale(-1,1); }
+    cx.drawImage(camVideo,0,0);
+    stopCamera();
+    if(cv.toBlob){
+      cv.toBlob(function(blob){
+        if(!blob){ loadPhotoFromUrl(cv.toDataURL('image/jpeg',0.92)); return; }
+        var f=null;
+        try{ f=new File([blob],'カメラで撮影した写真.jpg',{type:'image/jpeg'}); }catch(e){ f=null; }
+        if(f) handleFiles([f]);
+        else loadPhotoFromUrl(URL.createObjectURL(blob));
+      },'image/jpeg',0.92);
+    }else{
+      loadPhotoFromUrl(cv.toDataURL('image/jpeg',0.92));
+    }
+    toast('撮影しました。このまま判定できます');
+  }
+
+  document.getElementById('cameraBtn').addEventListener('click',function(e){ e.preventDefault(); startCamera(); });
+  document.getElementById('pickBtn').addEventListener('click',function(e){ e.preventDefault(); openPicker(); });
+  document.getElementById('shootBtn').addEventListener('click',function(e){ e.preventDefault(); capturePhoto(); });
+  document.getElementById('closeCamBtn').addEventListener('click',function(e){ e.preventDefault(); stopCamera(); });
+  document.getElementById('switchCamBtn').addEventListener('click',function(e){
+    e.preventDefault();
+    camFacing=(camFacing==='user')?'environment':'user';
+    if(camStream) startCamera();
+  });
 
   var TYPES={
     spring:{key:'spring',title:'イエベ春',en:'YELLOW BASE — SPRING / Bright Warm',heroClass:'type-spring',heroStops:[['#E9A13B',0],['#E87A4A',0.55],['#D95D7A',1]],desc:'黄みのある明るい肌が特徴の、フレッシュで華やかなタイプ。明るく鮮やかな色で顔まわりがパッと明るく見えます。コーラルやピーチなど、温かくクリアな色が得意です。',tags:['イエベ','明るい','鮮やか','ゴールド◎'],paletteSub:'イエベ春は「明るく・黄み・クリア」な色がベスト。アイボリーをベースに、ビタミンカラーを顔まわりに。',palette:[['#FFF3D6','アイボリー','ベースカラー'],['#FFB59E','コーラルピーチ','チーク・リップ'],['#FF8A5B','アプリコット','トップス'],['#FFD23F','カナリアイエロー','差し色'],['#7ED3B2','ミントグリーン','ニット'],['#4ECDC4','ターコイズ','アクセサリー'],['#FF6B81','コーラルピンク','リップ'],['#C68642','キャメル','バッグ・靴']],makeup:['ファンデはイエローベージュ／オークル寄りの明るめ','リップはコーラル・オレンジ・ピーチ系','チークはアプリコットやコーラルで血色感を','アイシャドウはゴールド・オレンジブラウン'],fashion:['アクセサリーはゴールドが圧勝','白は真っ白よりアイボリー・生成り','髪色は明るめのハニー／ゴールデンブラウン'],avoid:[['#7A9AB8','くすみブルー'],['#8A7FB8','青みラベンダー'],['#2B2B2B','真っ黒']],avoidText:'青みの強いくすみ色や真っ黒は、顔が疲れて見えやすいので面積を小さく。'},
@@ -752,6 +878,11 @@
       if(hCnt>60){ contrast=(0.299*comb.r+0.587*comb.g+0.114*comb.bl)-(hSum/hCnt); }
     }
 
+    // spread across regions (uniformity): std of region b* / L*
+    function stdOf(arr){ if(arr.length<2) return 0; var m=arr.reduce(function(s,v){return s+v;},0)/arr.length; return Math.sqrt(arr.reduce(function(s,v){ var d=v-m; return s+d*d; },0)/arr.length); }
+    var spreadB=stdOf(regions.map(function(r){return r.b;}));
+    var spreadL=stdOf(regions.map(function(r){return r.L;}));
+
     var blur=blurScore(ctx,W,H,box);
     var metrics=computeMetrics(comb.L,comb.a,comb.b,contrast);
     var conf=computeConfidence({
@@ -764,7 +895,8 @@
       L:comb.L,a:comb.a,b:comb.b,r:Math.round(comb.r),g:Math.round(comb.g),bl:Math.round(comb.bl),
       warm:metrics.warm, probs:metrics.probs, typeKey:metrics.typeKey, margin:metrics.margin,
       conf:conf, regions:regions.length, samples:totalSamples, dropped:droppedRegion?droppedRegion.label:null,
-      quality:buildQuality({samples:totalSamples,regionCount:regions.length,faceArea:faceAreaRatio,faceSource:faceSource,
+      spreadB:spreadB, spreadL:spreadL, cast:wb.cast, blown:blownRatio, dark:darkRatio,
+      quality:buildQuality({samples:totalSamples,regionCount:regions.length,faceArea:faceAreaRatio,faceSource:faceSource,lum:comb.L,
         cheekDiff:cheekDiff,blown:blownRatio,dark:darkRatio,blur:blur,cast:wb.cast,dropped:droppedRegion?droppedRegion.label:null})
     };
   }
@@ -774,6 +906,7 @@
     items.push({ok:q.samples>=1200, text:'肌サンプル '+q.samples.toLocaleString()+' 点を測定（額・頬・あごなど'+q.regionCount+'部位）'});
     items.push({ok:q.faceArea>=0.08, text:q.faceArea>=0.08?'顔が十分大きく写っています（画面の約'+Math.round(q.faceArea*100)+'%）':'顔が小さめです。顔が画面の1/4以上に写る写真だと安定します'});
     items.push({ok:q.blown<0.04&&q.dark<0.25, text:(q.blown>=0.04||q.dark>=0.25)?'白とび・黒つぶれが多めです。明るすぎ／暗すぎる写真は避けてください':'露出は適正です（白とび・黒つぶれはわずか）'});
+    if(typeof q.lum==='number') items.push({ok:q.lum>=45&&q.lum<=80, text:q.lum<45?'写真の明るさは暗めです。明るい場所で撮ると安定します':(q.lum>80?'写真の明るさは明るすぎ気味です。直射日光は避けてください':'写真の明るさは適正な範囲です')});
     if(q.cheekDiff===null){ items.push({ok:false,text:'左右の頬を比べられませんでした。正面の写真がおすすめです'}); }
     else items.push({ok:q.cheekDiff<=8, text:q.cheekDiff<=8?'左右の頬の明るさが揃っています（片側だけの影が少ない）':'左右の頬で明るさに差があります。顔の片側に影が落ちている可能性があります'});
     items.push({ok:q.blur>=40, text:q.blur>=40?'輪郭がシャープで、ぶれの影響は小さいです':'少しぶれ／ピンボケ気味です。静止して撮った写真がおすすめです'});
@@ -843,10 +976,12 @@
     var droppedNote=null;
     if(kept.length>=1 && kept.length<results.length){ droppedNote=(results.length-kept.length)+'枚の写真が他と大きく違う色味だったため、平均から外しました'; results=kept; }
     var tw=0,L=0,a=0,b=0,R=0,G=0,B=0,warm=0;
+    var spB=0,spL=0,cst=0,blw=0,drk=0;
     var probs={spring:0,summer:0,autumn:0,winter:0};
     results.forEach(function(r){
       var w=Math.max(0.3,r.conf/100); tw+=w;
       L+=r.L*w; a+=r.a*w; b+=r.b*w; R+=r.r*w; G+=r.g*w; B+=r.bl*w; warm+=r.warm*w;
+      spB+=(r.spreadB||0)*w; spL+=(r.spreadL||0)*w; cst=Math.max(cst,r.cast||0); blw+=(r.blown||0)*w; drk+=(r.dark||0)*w;
       Object.keys(probs).forEach(function(k){ probs[k]+=r.probs[k]*w; });
     });
     L/=tw;a/=tw;b/=tw;
@@ -858,6 +993,7 @@
     var bonus=results.length>1? Math.min(8,(results.length-1)*4):0;
     var src=results.slice().sort(function(x,y){return y.conf-x.conf})[0];
     return {L:L,a:a,b:b,r:Math.round(R/tw),g:Math.round(G/tw),bl:Math.round(B/tw),
+      spreadB:spB/tw,spreadL:spL/tw,cast:cst,blown:blw/tw,dark:drk/tw,
       warm:warm/tw,probs:probs,typeKey:best,margin:bestP-secondP,
       conf:Math.round(clamp(bestConf+bonus,30,97)),regions:src.regions,samples:results.reduce(function(s,r){return s+r.samples;},0),
       quality:src.quality,multiCount:results.length,droppedNote:droppedNote};
@@ -890,6 +1026,29 @@
     var satPct=Math.round(clamp(C/40*100,0,100));
     document.getElementById('diagSat').textContent=(C>=24?'鮮やか':(C<=15?'穏やか':'ふつう'))+'（C* '+Math.round(C)+'）';
     document.getElementById('barSat').style.width=satPct+'%';
+    // extra measured indicators (detail fold only)
+    var redPct=clamp(Math.round(res.a/30*100),0,100);
+    document.getElementById('diagRed').textContent=(res.a>=19?'赤み強め':(res.a<=12?'赤み控えめ':'赤みふつう'))+'（a* '+Math.round(res.a)+'）';
+    document.getElementById('barRed').style.width=redPct+'%';
+    var uni=Math.round(clamp(100-((res.spreadB||0)*6+(res.spreadL||0)*1.5),5,100));
+    document.getElementById('diagEven').textContent=(uni>=70?'均一':(uni>=45?'ややばらつき':'ばらつき大きめ'))+'（'+uni+' / 100）';
+    document.getElementById('barEven').style.width=uni+'%';
+    var castPct=Math.round((res.cast||0)*100);
+    document.getElementById('diagCast').textContent=(castPct<=5?'ほぼなし':(castPct<=15?'やや色かぶり':'色かぶり強め'))+'（約'+castPct+'%を補正）';
+    document.getElementById('barCast').style.width=clamp(castPct/30*100,0,100)+'%';
+    // plain-language reasons (max 3, from measured values only)
+    var reasons=[];
+    if(res.warm>=57) reasons.push('黄みが青みより強めに出ています');
+    else if(res.warm<=43) reasons.push('青みが黄みより強めに出ています');
+    else reasons.push('黄みと青みはほぼ同じくらいで、中間寄りの肌色です');
+    if(res.L>=64) reasons.push('肌の明るさは明るめです');
+    else if(res.L<52) reasons.push('肌の明るさは落ち着いた深めです');
+    else reasons.push('肌の明るさは中くらいです');
+    if(C>=24) reasons.push('色の鮮やかさがはっきり出ています');
+    else if(C<=15) reasons.push('鮮やかさは控えめで、やわらかい色みです');
+    else if(res.a>=17) reasons.push('頬の赤み（血色感）がやや強めに出ています');
+    else reasons.push('鮮やかさは中くらいで、穏やかな色みです');
+    document.getElementById('reasonsList').innerHTML=reasons.slice(0,3).map(function(x){return '<li>'+x+'</li>'}).join('');
     // confidence -> renamed as a relative stability score (R-3)
     document.getElementById('confVal').textContent=res.conf+' / 100';
     document.getElementById('confLabel').textContent=res.conf>=80?'手ごたえ：高い':(res.conf>=60?'手ごたえ：ふつう':'手ごたえ：低め — 別の写真だと安定します');
