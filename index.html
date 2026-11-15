@@ -36,7 +36,7 @@
       --surface:#221D19;
       --surface2:#29221D;
       --ink:#F5EDE6;
-      --muted:#B8A99C;
+      --muted:#D3C6B8;
       --line:#3A332D;
       --warm:#E39A6B;
       --warm-bg:#3A2718;
@@ -53,34 +53,35 @@
   }
   *{box-sizing:border-box}
   html{scroll-behavior:smooth}
-  body{margin:0;background:var(--bg);color:var(--ink);font-family:"Zen Kaku Gothic New",system-ui,-apple-system,sans-serif;line-height:1.7;-webkit-font-smoothing:antialiased}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:"Zen Kaku Gothic New",system-ui,-apple-system,sans-serif;font-size:16px;line-height:1.8;-webkit-font-smoothing:antialiased}
   button,[role="button"]{min-height:44px}
   a{color:inherit}
-  .wrap{max-width:1080px;margin:0 auto;padding:0 18px 56px}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 18px 64px}
   /* Hero */
   .hero{padding:26px 0 2px;max-width:780px;margin:0 auto}
   .kicker{display:inline-flex;align-items:center;gap:8px;font-size:12px;letter-spacing:.14em;font-weight:700;text-transform:uppercase;color:var(--muted)}
   .kicker i{width:28px;height:1px;background:var(--ink);display:inline-block}
-  h1{font-family:"Shippori Mincho",serif;font-size:clamp(38px,6vw,64px);line-height:1.08;margin:14px 0 12px;font-weight:800;letter-spacing:.02em}
+  h1{font-family:"Shippori Mincho",serif;font-size:clamp(34px,6vw,56px);line-height:1.15;margin:14px 0 12px;font-weight:800;letter-spacing:.02em}
   h1 .warm{color:var(--warm)} h1 .cool{color:var(--cool)}
-  .lead{font-size:16px;color:var(--muted);max-width:560px;margin:0}
+  .lead{font-size:16.5px;line-height:1.75;color:var(--ink);max-width:560px;margin:0}
   .lead strong{color:var(--ink)}
+  .privacyLine{font-size:13px;color:var(--muted);margin:8px 0 0;line-height:1.6}
   /* Main grid */
-  .main{display:block;max-width:780px;margin:22px auto 0}
-  .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow)}
-  .card h2{font-family:"Shippori Mincho",serif;font-size:22px;margin:0 0 6px;line-height:1.3}
-  .card h3{font-size:14px;letter-spacing:.08em;margin:0 0 10px}
-  .sub{color:var(--muted);font-size:13.5px;margin:0 0 16px}
+  .main{display:block;max-width:780px;margin:28px auto 0}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:24px 22px;box-shadow:var(--shadow)}
+  .card h2{font-family:"Shippori Mincho",serif;font-size:23px;margin:0 0 8px;line-height:1.35}
+  .card h3{font-size:15px;letter-spacing:.06em;margin:0 0 10px}
+  .sub{color:var(--muted);font-size:15px;line-height:1.75;margin:0 0 16px}
   /* Upload */
   .drop{border:1.8px dashed var(--drop-line);border-radius:18px;background:var(--surface2);padding:8px;transition:.2s;cursor:pointer}
   #errorBox{display:none;margin-top:12px;background:var(--error-bg);border:1px solid var(--error-line);color:var(--error-ink);border-radius:12px;padding:12px 14px;font-size:13.5px;font-weight:700}
   .drop.drag{border-color:var(--warm);background:var(--warm-bg);transform:scale(.995)}
-  .drop-inner{border-radius:14px;min-height:300px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px 18px;position:relative;overflow:hidden}
+  .drop-inner{border-radius:14px;min-height:210px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:22px 18px;position:relative;overflow:hidden}
   .drop.has-photo .drop-inner{padding:10px;min-height:auto}
   .upload-icon{width:62px;height:62px;border-radius:50%;background:var(--ink);color:var(--bg);display:grid;place-items:center;margin-bottom:14px}
   .upload-icon svg{width:28px;height:28px}
   .drop b{font-size:18px}
-  .drop p{color:var(--muted);font-size:13px;margin:6px 0 0;max-width:360px}
+  .drop p{color:var(--muted);font-size:14.5px;margin:6px 0 0;max-width:360px}
   #previewWrap{display:none;width:100%}
   #previewWrap.show{display:block}
   .previewBox{position:relative;border-radius:14px;overflow:hidden;background:#000}
@@ -93,7 +94,14 @@
   @media (prefers-reduced-motion: reduce){.scanning .scan{animation:none}}
   .fileMeta{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-top:10px;font-size:12px;color:var(--muted)}
   .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
-  .btn{appearance:none;border:0;cursor:pointer;border-radius:999px;padding:0 20px;font-weight:800;font-size:15px;display:inline-flex;align-items:center;justify-content:center;gap:8px;text-decoration:none}
+  .btn{appearance:none;border:0;cursor:pointer;border-radius:999px;padding:0 20px;font-weight:800;font-size:15.5px;display:inline-flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;white-space:nowrap;writing-mode:horizontal-tb}
+  /* Photo-present actions: primary full-width, secondary side by side — never a narrow vertical strip */
+  .photoActions{display:flex;flex-direction:column;gap:10px;margin-top:18px}
+  .photoActions .btn-primary{width:100%;min-height:56px;font-size:16.5px}
+  .subActions{display:flex;gap:10px}
+  .subActions .btn{flex:1 1 0;min-height:50px;padding:0 10px}
+  .entryActions{display:flex;gap:10px;margin-top:14px}
+  .entryActions .btn{flex:1 1 0;min-height:54px;padding:0 10px}
   .btn-primary{background:var(--ink);color:var(--bg);flex:1;min-height:52px}
   .btn-primary:disabled{opacity:.45;cursor:not-allowed}
   .btn-ghost{background:transparent;color:var(--ink);border:1px solid var(--line);min-height:52px;padding:0 16px}
@@ -106,7 +114,7 @@
   .num{flex:0 0 36px;width:36px;height:36px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;font-family:"Shippori Mincho",serif;font-weight:800}
   .step b{font-size:14px} .step p{margin:2px 0 0;color:var(--muted);font-size:13px;line-height:1.6}
   .tips{list-style:none;padding:0;margin:0;display:grid;gap:9px}
-  .tips li{display:flex;gap:10px;font-size:13.5px;line-height:1.6}
+  .tips li{display:flex;gap:10px;font-size:15px;line-height:1.7}
   .tips li::before{content:"✓";flex:0 0 20px;width:20px;height:20px;margin-top:2px;border-radius:50%;background:var(--warm-bg);color:var(--warm);display:grid;place-items:center;font-size:12px;font-weight:700}
   /* Result */
   #result{display:none;margin-top:18px}
@@ -117,7 +125,7 @@
   .resultHero > *{position:relative;z-index:1}
   .resultHero .label{font-size:12px;letter-spacing:.14em;font-weight:900;opacity:.9}
   .resultHero h2{font-family:"Shippori Mincho",serif;font-size:clamp(36px,5vw,56px);line-height:1;margin:8px 0 6px;color:white}
-  .resultHero p{margin:0;opacity:.95;font-size:14.5px;max-width:560px}
+  .resultHero p{margin:0;opacity:.97;font-size:15.5px;line-height:1.75;max-width:560px}
   .type-spring{background:linear-gradient(135deg,#E9A13B,#E87A4A 55%,#D95D7A)}
   .type-summer{background:linear-gradient(135deg,#7A9AB8,#8A7FB8 55%,#C48AA6)}
   .type-autumn{background:linear-gradient(135deg,#8A5A2B,#A65A2E 50%,#6B7A3A)}
@@ -140,7 +148,7 @@
   .cols{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-top:14px}
   .mini{border-top:1px solid var(--line);padding-top:14px}
   .mini h4{margin:0 0 8px;font-size:14px}
-  .mini ul{margin:0;padding-left:18px;color:var(--muted);font-size:13.5px}
+  .mini ul{margin:0;padding-left:18px;color:var(--muted);font-size:15px;line-height:1.75}
   .mini li{margin:4px 0}
   .avoid{display:flex;gap:8px;flex-wrap:wrap}
   .avoid span{width:38px;height:38px;border-radius:50%;border:2px solid var(--line);position:relative}
@@ -149,7 +157,7 @@
   .progress.show{display:flex}
   .spinner{width:18px;height:18px;border-radius:50%;border:2px solid var(--line);border-top-color:var(--ink);animation:spin .7s linear infinite;flex:0 0 18px}
   @keyframes spin{to{transform:rotate(360deg)}}
-  .note{font-size:12px;color:var(--muted);line-height:1.7;margin-top:14px;border-top:1px dashed var(--line);padding-top:12px}
+  .note{font-size:13px;color:var(--muted);line-height:1.7;margin-top:16px;border-top:1px dashed var(--line);padding-top:12px}
   .hiddenCanvas{display:none}
   /* Camera */
   #cameraPanel{display:none;margin-top:14px}
@@ -187,13 +195,13 @@
   .borderNote{display:none;margin-top:12px;background:var(--warm-bg);border:1px solid var(--line);border-radius:12px;padding:10px 12px;font-size:12.5px;line-height:1.65}
   .borderNote.show{display:block}
   /* UX revision (R-1..R-8) */
-  .legend{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap}
-  .legend div{flex:1;min-width:150px;border-radius:14px;padding:10px 14px;font-size:13px;line-height:1.55}
+  .legend{display:flex;gap:10px;margin-top:18px;flex-wrap:wrap}
+  .legend div{flex:1;min-width:130px;border-radius:999px;padding:9px 14px;font-size:14px;line-height:1.4;text-align:center}
   .legend .w{background:var(--warm-bg);color:var(--warm);border:1px solid var(--line)}
   .legend .c{background:var(--cool-bg);color:var(--cool);border:1px solid var(--line)}
   .legend b{font-family:"Shippori Mincho",serif;font-size:16px}
-  .check3{list-style:none;padding:0;margin:0 0 14px;display:grid;gap:7px}
-  .check3 li{display:flex;gap:9px;font-size:13.5px;font-weight:700;align-items:flex-start;line-height:1.55}
+  .check3{list-style:none;padding:0;margin:0 0 18px;display:grid;gap:10px}
+  .check3 li{display:flex;gap:9px;font-size:15.5px;font-weight:700;align-items:flex-start;line-height:1.6}
   .check3 li::before{content:"✓";flex:0 0 20px;width:20px;height:20px;border-radius:50%;background:var(--warm-bg);color:var(--warm);display:grid;place-items:center;font-size:12px;font-weight:700;margin-top:2px}
   details.fold>summary{cursor:pointer;font-weight:800;font-size:15px;min-height:44px;display:flex;align-items:center;gap:8px;list-style:none}
   details.fold>summary::-webkit-details-marker{display:none}
@@ -230,30 +238,30 @@
   <header class="hero">
     <div class="kicker"><i></i> Personal Color Diagnosis</div>
     <h1>写真1枚で、<br><span class="warm">イエベ</span> / <span class="cool">ブルベ</span><br>を判定する。</h1>
-    <p class="lead">顔写真を<strong>その場で撮る／選ぶ</strong>だけで、あなたのイエベ／ブルベと似合う色が分かります。写真は<strong>端末の中だけで解析され、外部に送信・保存されることはありません</strong>。</p>
+    <p class="lead">写真1枚で、イエベ／ブルベと似合う色が分かります。</p>
+    <p class="privacyLine">写真は端末の中だけで処理され、外に送られることはありません。</p>
     <div class="legend">
-      <div class="w"><b>イエベ（春・秋）</b><br>黄みのある肌／ゴールドが映える</div>
-      <div class="c"><b>ブルベ（夏・冬）</b><br>青みのある肌／シルバーが映える</div>
+      <div class="w"><b>イエベ（春・秋）</b></div>
+      <div class="c"><b>ブルベ（夏・冬）</b></div>
     </div>
   </header>
 
   <div class="main">
     <!-- Upload -->
     <section class="card" id="uploadCard">
-      <h2>顔写真を用意してください</h2>
-      <p class="sub">カメラでその場で撮っても、保存済みの写真を選んでもOK。写真は1枚で判定できます。まず、この3つだけ確認してください。</p>
+      <h2>写真を撮る／選ぶ</h2>
       <ul class="check3">
-        <li>窓辺などの自然光で、顔に影が入らないように撮る</li>
-        <li>美肌フィルター・色補正はOFFにする</li>
-        <li>ノーメイク〜薄メイクで、額と頬が見える正面の写真にする</li>
+        <li>自然光で撮る</li>
+        <li>フィルターはOFF</li>
+        <li>ノーメイクで正面から</li>
       </ul>
 
       <div class="drop" id="dropZone" role="button" tabindex="0" aria-label="写真を選択する">
         <div class="drop-inner" id="dropInner">
           <div id="emptyState">
             <div class="upload-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 16V4m0 0l-4 4m4-4l4 4"/><path d="M4 16v3a1 1 0 001 1h14a1 1 0 001-1v-3"/></svg></div>
-            <b>タップして写真を選ぶ</b>
-            <p>下の「カメラで撮る」から、その場で撮影もできます<br>またはここに画像をドラッグ＆ドロップ（JPG / PNG / HEICなど）</p>
+            <b>写真を選ぶ</b>
+            <p>タップ、またはドラッグ＆ドロップ</p>
           </div>
           <div id="previewWrap">
             <div class="previewBox" id="previewBox">
@@ -261,12 +269,12 @@
               <div class="face-guide"><span></span></div>
               <div class="scan"></div>
             </div>
-            <div class="fileMeta"><span id="fileName">—</span><span>楕円の中に顔が入ると精度が上がります</span></div>
+            <div class="fileMeta"><span id="fileName">—</span><span>楕円に顔を合わせてください</span></div>
           </div>
         </div>
       </div>
-      <div class="actions" style="margin-top:12px">
-        <button class="btn btn-primary" id="cameraBtn" style="flex:1">
+      <div class="entryActions">
+        <button class="btn btn-primary" id="cameraBtn">
           <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" aria-hidden="true"><path d="M4 8h3l2-2.5h6L17 8h3a1 1 0 011 1v10a1 1 0 01-1 1H4a1 1 0 01-1-1V9a1 1 0 011-1z"/><circle cx="12" cy="13.5" r="3.6"/></svg>
           カメラで撮る
         </button>
@@ -283,23 +291,23 @@
           <button class="btn btn-ghost" id="switchCamBtn">前／外カメラ切替</button>
           <button class="btn btn-ghost" id="closeCamBtn">閉じる</button>
         </div>
-        <p class="addHint" style="margin-top:8px">明るい場所で、楕円の中に顔を合わせて撮影してください。撮った写真は、選んだ写真と同じ方法でそのまま判定に使えます。カメラの映像も端末の外に送信されません。</p>
+        <p class="addHint" style="margin-top:8px">明るい場所で、楕円に顔を合わせてください。</p>
       </div>
 
       <div class="thumbs" id="thumbs" aria-label="選択中の写真一覧"></div>
-      <div class="actions" style="margin-top:10px">
-        <button class="btn btn-ghost btn-small" id="addBtn" style="display:none">＋ 写真を追加する（最大3枚）</button>
-        <span class="addHint" id="addHint" style="display:none">別の照明・別の日で撮った写真を足すと、色かぶりの影響が平均化されて精度が上がります。</span>
-      </div>
       <div id="errorBox"></div>
 
       <div class="progress" id="progress"><span class="spinner"></span><span id="progressText">肌の色を読み取っています…</span></div>
 
-      <div class="actions">
+      <div class="photoActions">
         <button class="btn btn-primary" id="analyzeBtn" disabled>この写真で判定する →</button>
-        <button class="btn btn-ghost" id="changeBtn" style="display:none">写真を入れ替えて選び直す</button>
+        <div class="subActions">
+          <button class="btn btn-ghost" id="changeBtn" style="display:none">入れ替える</button>
+          <button class="btn btn-ghost" id="addBtn" style="display:none">追加する</button>
+        </div>
+        <span class="addHint" id="addHint" style="display:none">別の照明の写真を足すと判定が安定します（最大3枚）。</span>
       </div>
-      <p class="note">※ 照明やフィルターで結果は変わります。白い壁の前・自然光・ノーメイクに近い写真ほど正確です。本診断は目安であり、プロの対面診断の代わりではありません。</p>
+      <p class="note">※ 照明で結果が変わります。自然光・ノーメイクに近い写真がおすすめです。</p>
     </section>
 
     <!-- How it works: folded reference info (R-1) -->
@@ -345,8 +353,7 @@
     </div>
     <div class="card reasons" id="reasonsCard">
       <h3>なぜこの結果になったか</h3>
-      <ul class="check3" id="reasonsList"></ul>
-      <p class="scoreNote" style="margin-bottom:0">写真から実際に測れた色の傾向にもとづく目安です。くわしい数値は、下の「くわしい根拠」にまとめています。</p>
+      <ul class="check3" id="reasonsList" style="margin-bottom:0"></ul>
     </div>
     <div class="runner card" id="runnerUp"></div>
     <div class="compareNote" id="compareNote"></div>
@@ -356,23 +363,25 @@
       <button class="btn btn-ghost" id="copyTextBtn" style="min-height:48px">テキストでコピー</button>
     </div>
     <div class="resultActions">
-      <button class="btn btn-ghost btn-small" id="replaceBtn">写真を入れ替えて再判定</button>
-      <button class="btn btn-ghost btn-small" id="addMoreBtn">写真を追加して再判定</button>
-      <span class="addHint">写真の追加は最大3枚まで。別の照明の写真を足すと判定が安定します。</span>
+      <button class="btn btn-ghost btn-small" id="replaceBtn">入れ替えて再判定</button>
+      <button class="btn btn-ghost btn-small" id="addMoreBtn">追加して再判定</button>
     </div>
 
-    <div class="card" style="margin-top:18px">
+    <div class="card" style="margin-top:22px">
       <h2>あなたに似合う色</h2>
       <p class="sub" id="paletteSub">—</p>
-      <p class="sub" style="margin-top:-8px">各色にはHEXコードを表示しています。タップするとコピーできます。</p>
+      <p class="sub" style="margin-top:-8px">タップでHEXコードをコピーできます。</p>
       <div class="palette" id="palette"></div>
+    </div>
 
-      <div class="cols">
+    <details class="card fold" style="margin-top:16px">
+      <summary>メイク・ファッション・苦手な色</summary>
+      <div class="cols" style="margin-top:4px">
         <div class="mini"><h4>メイク</h4><ul id="makeupList"></ul></div>
         <div class="mini"><h4>ファッション・小物</h4><ul id="fashionList"></ul></div>
-        <div class="mini"><h4>苦手になりやすい色</h4><div class="avoid" id="avoidList"></div><p style="font-size:12.5px;color:var(--muted);margin:8px 0 0" id="avoidText"></p></div>
+        <div class="mini"><h4>苦手になりやすい色</h4><div class="avoid" id="avoidList"></div><p style="font-size:13.5px;color:var(--muted);margin:8px 0 0" id="avoidText"></p></div>
       </div>
-    </div>
+    </details>
 
     <details class="card fold evidence" id="evidence">
       <summary>くわしい根拠（数値・詳細と写真の状態）</summary>
@@ -403,10 +412,8 @@
         <ul class="quality" id="qualityList"></ul>
       </div>
     </details>
-    <p class="note">本診断は目安であり、プロの対面診断の代わりではありません。照明や写真の状態によって結果は変わります。</p>
+    <p class="note">本診断は目安です。照明や写真の状態で結果は変わります。</p>
   </section>
-
-  <p style="text-align:center;color:var(--muted);font-size:12px;margin-top:28px">写真はあなたの端末の中だけで処理されます。サーバーへ送信・保存されることはありません。</p>
 </div>
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
@@ -603,8 +610,8 @@
     analyzeBtn.disabled=false;
     analyzeBtn.textContent=photos.length>1?(photos.length+'枚の平均で判定する →'):(hasResult?'この写真で再判定する →':'この写真で判定する →');
     changeBtn.style.display='inline-flex';
-    addBtn.style.display=(hasResult&&photos.length<MAX_PHOTOS)?'inline-flex':'none';
-    addHint.style.display=(hasResult&&photos.length<MAX_PHOTOS)?'inline':'none';
+    addBtn.style.display=(photos.length<MAX_PHOTOS)?'inline-flex':'none';
+    addHint.style.display=(photos.length<MAX_PHOTOS)?'block':'none';
     /* R-7: previous result stays visible until a new one is rendered */
     // thumbnails
     thumbsEl.innerHTML='';
@@ -1079,7 +1086,7 @@
     // palette etc.
     document.getElementById('paletteSub').textContent=t.paletteSub;
     var palEl=document.getElementById('palette');
-    palEl.innerHTML=t.palette.map(function(p){return '<button type="button" class="swatch" data-hex="'+p[0]+'" aria-label="'+p[1]+' '+p[0]+' をコピー"><i style="background:'+p[0]+'"></i><span>'+p[1]+'<span class="hex">'+p[0]+'</span><small>'+p[2]+'（タップでコピー）</small></span></button>'}).join('');
+    palEl.innerHTML=t.palette.map(function(p){return '<button type="button" class="swatch" data-hex="'+p[0]+'" aria-label="'+p[1]+' '+p[0]+' をコピー"><i style="background:'+p[0]+'"></i><span>'+p[1]+'<span class="hex">'+p[0]+'</span><small>'+p[2]+'</small></span></button>'}).join('');
     Array.prototype.forEach.call(palEl.querySelectorAll('.swatch'),function(sw){
       sw.addEventListener('click',function(){ copyText(sw.getAttribute('data-hex'),'HEX '+sw.getAttribute('data-hex')+' をコピーしました'); });
     });
