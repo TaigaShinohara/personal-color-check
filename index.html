@@ -8,7 +8,7 @@
 <title>ブルベ・イエベ判定アプリ</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700;800&family=Zen+Kaku+Gothic+New:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700;800&display=swap" rel="stylesheet">
 <style>
   :root{
     --bg:#FFFBF6;
@@ -53,7 +53,7 @@
   }
   *{box-sizing:border-box}
   html{scroll-behavior:smooth}
-  body{margin:0;background:var(--bg);color:var(--ink);font-family:"Zen Kaku Gothic New",system-ui,-apple-system,sans-serif;font-size:16px;line-height:1.8;-webkit-font-smoothing:antialiased}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:"M PLUS Rounded 1c",system-ui,-apple-system,sans-serif;font-size:16px;line-height:1.8;-webkit-font-smoothing:antialiased}
   button,[role="button"]{min-height:44px}
   a{color:inherit}
   .wrap{max-width:1080px;margin:0 auto;padding:0 18px 64px}
@@ -61,7 +61,7 @@
   .hero{padding:26px 0 2px;max-width:780px;margin:0 auto}
   .kicker{display:inline-flex;align-items:center;gap:8px;font-size:12px;letter-spacing:.14em;font-weight:700;text-transform:uppercase;color:var(--muted)}
   .kicker i{width:28px;height:1px;background:var(--ink);display:inline-block}
-  h1{font-family:"Shippori Mincho",serif;font-size:clamp(34px,6vw,56px);line-height:1.15;margin:14px 0 12px;font-weight:800;letter-spacing:.02em}
+  h1{font-family:"M PLUS Rounded 1c",sans-serif;font-size:clamp(34px,6vw,56px);line-height:1.15;margin:14px 0 12px;font-weight:800;letter-spacing:.02em}
   h1 .warm{color:var(--warm)} h1 .cool{color:var(--cool)}
   .lead{font-size:16.5px;line-height:1.75;color:var(--ink);max-width:560px;margin:0}
   .lead strong{color:var(--ink)}
@@ -69,7 +69,7 @@
   /* Main grid */
   .main{display:block;max-width:780px;margin:28px auto 0}
   .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:24px 22px;box-shadow:var(--shadow)}
-  .card h2{font-family:"Shippori Mincho",serif;font-size:23px;margin:0 0 8px;line-height:1.35}
+  .card h2{font-family:"M PLUS Rounded 1c",sans-serif;font-size:23px;margin:0 0 8px;line-height:1.35}
   .card h3{font-size:15px;letter-spacing:.06em;margin:0 0 10px}
   .sub{color:var(--muted);font-size:15px;line-height:1.75;margin:0 0 16px}
   /* Upload */
@@ -111,7 +111,7 @@
   .steps{display:grid;gap:12px}
   .step{display:flex;gap:12px;padding:13px 0;border-bottom:1px solid var(--line)}
   .step:last-child{border-bottom:0}
-  .num{flex:0 0 36px;width:36px;height:36px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;font-family:"Shippori Mincho",serif;font-weight:800}
+  .num{flex:0 0 36px;width:36px;height:36px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;font-family:"M PLUS Rounded 1c",sans-serif;font-weight:800}
   .step b{font-size:14px} .step p{margin:2px 0 0;color:var(--muted);font-size:13px;line-height:1.6}
   .tips{list-style:none;padding:0;margin:0;display:grid;gap:9px}
   .tips li{display:flex;gap:10px;font-size:15px;line-height:1.7}
@@ -124,7 +124,7 @@
   .resultHero::after{content:"";position:absolute;inset:0;background:radial-gradient(600px 260px at 85% 0%,rgba(255,255,255,.35),transparent 60%)}
   .resultHero > *{position:relative;z-index:1}
   .resultHero .label{font-size:12px;letter-spacing:.14em;font-weight:900;opacity:.9}
-  .resultHero h2{font-family:"Shippori Mincho",serif;font-size:clamp(36px,5vw,56px);line-height:1;margin:8px 0 6px;color:white}
+  .resultHero h2{font-family:"M PLUS Rounded 1c",sans-serif;font-size:clamp(36px,5vw,56px);line-height:1;margin:8px 0 6px;color:white}
   .resultHero p{margin:0;opacity:.97;font-size:15.5px;line-height:1.75;max-width:560px}
   .type-spring{background:linear-gradient(135deg,#E9A13B,#E87A4A 55%,#D95D7A)}
   .type-summer{background:linear-gradient(135deg,#7A9AB8,#8A7FB8 55%,#C48AA6)}
@@ -168,7 +168,7 @@
   @media(max-width:820px){.camBox video{height:320px}}
   /* Reasons (plain-language, main result) */
   .reasons{margin-top:18px}
-  .reasons h3{font-family:"Shippori Mincho",serif;font-size:19px;margin:0 0 10px}
+  .reasons h3{font-family:"M PLUS Rounded 1c",sans-serif;font-size:19px;margin:0 0 10px}
   .reasons .check3{margin-bottom:0}
 
   /* Accuracy upgrade: thumbnails, confidence, quality */
@@ -181,7 +181,7 @@
   .addHint{font-size:12px;color:var(--muted);line-height:1.5}
   .confHead{display:flex;align-items:baseline;gap:10px;margin-top:18px;border-top:1px solid var(--line);padding-top:14px;flex-wrap:wrap}
   .confHead .confTitle{font-size:12px;font-weight:800;letter-spacing:.06em;color:var(--muted)}
-  .confHead b{font-size:26px;font-family:"Shippori Mincho",serif;line-height:1}
+  .confHead b{font-size:26px;font-family:"M PLUS Rounded 1c",sans-serif;line-height:1}
   .confBar{height:8px;background:var(--line);border-radius:999px;overflow:hidden;margin-top:6px}
   .confBar i{display:block;height:100%;background:var(--ink)}
   .seasonBars{display:grid;gap:7px;margin-top:12px}
@@ -199,7 +199,7 @@
   .legend div{flex:1;min-width:130px;border-radius:999px;padding:9px 14px;font-size:14px;line-height:1.4;text-align:center}
   .legend .w{background:var(--warm-bg);color:var(--warm);border:1px solid var(--line)}
   .legend .c{background:var(--cool-bg);color:var(--cool);border:1px solid var(--line)}
-  .legend b{font-family:"Shippori Mincho",serif;font-size:16px}
+  .legend b{font-family:"M PLUS Rounded 1c",sans-serif;font-size:16px}
   .check3{list-style:none;padding:0;margin:0 0 18px;display:grid;gap:10px}
   .check3 li{display:flex;gap:9px;font-size:15.5px;font-weight:700;align-items:flex-start;line-height:1.6}
   .check3 li::before{content:"✓";flex:0 0 20px;width:20px;height:20px;border-radius:50%;background:var(--warm-bg);color:var(--warm);display:grid;place-items:center;font-size:12px;font-weight:700;margin-top:2px}
@@ -231,15 +231,82 @@
     .palette{grid-template-columns:repeat(2,1fr)}
   }
   @media(max-width:420px){.diagGrid{grid-template-columns:1fr}}
+  /* Header row + Help */
+  [hidden]{display:none !important}
+  .obNavBtn:disabled{opacity:.35;cursor:default}
+  .heroTop{display:flex;align-items:center;justify-content:space-between;gap:12px}
+  #helpBtn{border-radius:999px;font-weight:800}
+  dialog:modal{overscroll-behavior:contain}
+  dialog::backdrop{overflow:hidden;overscroll-behavior:contain;background:rgba(24,16,10,.55)}
+  #helpDialog{border:1px solid var(--line);border-radius:22px;background:var(--surface);color:var(--ink);max-width:min(640px,92vw);width:100%;max-height:86vh;padding:0;box-shadow:var(--shadow)}
+  #helpDialog .helpInner{padding:24px 22px 26px;overflow-y:auto;max-height:86vh}
+  #helpDialog h2{font-size:22px;margin:0}
+  #helpDialog h3{font-size:16px;margin:22px 0 8px}
+  #helpDialog p,#helpDialog li{font-size:14.5px;line-height:1.75;color:var(--ink)}
+  #helpDialog .helpHead{display:flex;align-items:center;justify-content:space-between;gap:12px;position:sticky;top:0;background:var(--surface);padding-bottom:6px}
+  /* Onboarding */
+  #obOverlay{position:fixed;inset:0;z-index:80;background:var(--bg);display:none;flex-direction:column}
+  #obOverlay.show{display:flex}
+  .obTop{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px 18px 4px;max-width:640px;width:100%;margin:0 auto}
+  .obNavBtn{appearance:none;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:0 16px;font:inherit;font-weight:700;font-size:14px;cursor:pointer}
+  .obNavBtn.ghost{border-color:transparent;background:transparent;color:var(--muted)}
+  .obDots{display:flex;gap:7px;align-items:center;justify-content:center;flex:1}
+  .obDots i{display:block;border-radius:50%;background:var(--bar-idle);transition:all .3s}
+  .obDots i.cur{background:var(--ink)}
+  .obStage{flex:1;display:flex;align-items:center;justify-content:center;padding:10px 20px;overflow-y:auto}
+  .obPage{display:none;text-align:center;max-width:520px;width:100%}
+  .obPage.active{display:block;animation:obFade .35s ease}
+  @keyframes obFade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .obPage h2{font-size:clamp(24px,5.6vw,32px);line-height:1.4;margin:18px 0 10px;font-weight:800}
+  .obPage .obSub{font-size:15.5px;line-height:1.75;color:var(--muted);margin:0 auto;max-width:400px}
+  .obVisual{display:flex;align-items:center;justify-content:center;min-height:170px}
+  .obFloat{animation:obFloat 3.2s ease-in-out infinite}
+  @keyframes obFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+  .obPop{animation:obPop .45s cubic-bezier(.34,1.56,.64,1)}
+  @keyframes obPop{0%{transform:scale(.6);opacity:0}100%{transform:scale(1);opacity:1}}
+  .splitCircle{width:168px;height:168px;border-radius:50%;background:conic-gradient(#E87A4A 0 25%,#C48AA6 0 50%,#A65A2E 0 75%,#5B2A6B 0 100%);box-shadow:var(--shadow);position:relative}
+  .splitCircle::after{content:"";position:absolute;inset:52px;background:var(--bg);border-radius:50%}
+  .faceMock{width:150px;height:190px;border-radius:24px;background:var(--surface2);border:2px solid var(--line);display:grid;place-items:center}
+  .faceMock span{width:62%;aspect-ratio:.78;border:3px dashed var(--warm);border-radius:50%;display:block}
+  .lockBadge{width:120px;height:120px;border-radius:50%;background:var(--cool-bg);display:grid;place-items:center;color:var(--cool)}
+  .stepBadge{width:110px;height:110px;border-radius:50%;background:var(--ink);color:var(--bg);display:grid;place-items:center;font-size:52px;font-weight:800}
+  .obBars{width:230px;display:grid;gap:10px}
+  .obBars .obBarRow{display:flex;align-items:center;gap:10px;font-size:13px;font-weight:700;text-align:left}
+  .obBars .bar{flex:1;margin-top:0}
+  .obSwatches{display:flex;gap:8px}
+  .obSwatches i{width:44px;height:56px;border-radius:12px;display:block}
+  .obChoices{display:grid;gap:10px;margin-top:22px;text-align:left}
+  .obChoice{appearance:none;font:inherit;text-align:left;background:var(--surface);border:2px solid var(--line);border-radius:16px;padding:16px 18px;font-size:16px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:12px;min-height:60px}
+  .obChoice .dot{flex:0 0 14px;width:14px;height:14px;border-radius:50%}
+  .obChoice.picked{border-color:var(--ink);animation:obBounce .35s cubic-bezier(.34,1.56,.64,1)}
+  @keyframes obBounce{0%{transform:scale(1)}40%{transform:scale(1.05)}100%{transform:scale(1)}}
+  .obTiles{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:20px}
+  .obTile{appearance:none;font:inherit;border:0;border-radius:18px;padding:20px 12px;color:#fff;font-weight:800;font-size:17px;cursor:pointer;min-height:96px;transition:transform .3s}
+  .obTile.expanded{grid-column:1/-1;transform:scale(1.02)}
+  .obTile small{display:block;font-weight:500;font-size:12.5px;opacity:.92;margin-top:4px}
+  .obFoot{padding:8px 20px calc(20px + env(safe-area-inset-bottom));max-width:640px;width:100%;margin:0 auto}
+  .obNext{width:100%;min-height:56px;font-size:16.5px}
+  .obPraise{min-height:28px;text-align:center;font-weight:800;font-size:15px;color:var(--warm);margin:0 0 8px;opacity:0;transition:opacity .25s}
+  .obPraise.show{opacity:1}
+  .obCtas{display:grid;gap:10px}
+  .confetti{position:relative;width:180px;height:120px}
+  .confetti i{position:absolute;width:14px;height:14px;border-radius:4px;animation:obFloat 2.6s ease-in-out infinite}
+  @media (prefers-reduced-motion: reduce){
+    .obFloat,.confetti i{animation:none}
+    .obPage.active{animation:obFadeShort .15s ease}
+    @keyframes obFadeShort{from{opacity:0}to{opacity:1}}
+    .obChoice.picked,.obPop{animation:none}
+  }
 </style>
 </head>
 <body>
 <div class="wrap">
   <header class="hero">
-    <div class="kicker"><i></i> Personal Color Diagnosis</div>
+    <div class="heroTop">
+      <div class="kicker"><i></i> Personal Color Diagnosis</div>
+      <button type="button" class="btn btn-ghost btn-small" id="helpBtn" aria-haspopup="dialog">？ ヘルプ</button>
+    </div>
     <h1>写真1枚で、<br><span class="warm">イエベ</span> / <span class="cool">ブルベ</span><br>を判定する。</h1>
-    <p class="lead">写真1枚で、イエベ／ブルベと似合う色が分かります。</p>
-    <p class="privacyLine">写真は端末の中だけで処理され、外に送られることはありません。</p>
     <div class="legend">
       <div class="w"><b>イエベ（春・秋）</b></div>
       <div class="c"><b>ブルベ（夏・冬）</b></div>
@@ -250,11 +317,6 @@
     <!-- Upload -->
     <section class="card" id="uploadCard">
       <h2>写真を撮る／選ぶ</h2>
-      <ul class="check3">
-        <li>自然光で撮る</li>
-        <li>フィルターはOFF</li>
-        <li>ノーメイクで正面から</li>
-      </ul>
 
       <div class="drop" id="dropZone" role="button" tabindex="0" aria-label="写真を選択する">
         <div class="drop-inner" id="dropInner">
@@ -307,37 +369,7 @@
         </div>
         <span class="addHint" id="addHint" style="display:none">別の照明の写真を足すと判定が安定します（最大3枚）。</span>
       </div>
-      <p class="note">※ 照明で結果が変わります。自然光・ノーメイクに近い写真がおすすめです。</p>
     </section>
-
-    <!-- How it works: folded reference info (R-1) -->
-    <details class="card fold" style="margin-top:18px">
-      <summary>判定のしくみ・正確に撮るコツ</summary>
-      <div style="display:grid;gap:18px;margin-top:6px">
-      <section>
-        <h2 style="font-size:19px;font-family:'Shippori Mincho',serif;margin:0 0 6px">判定のしくみ</h2>
-        <div class="steps">
-          <div class="step"><span class="num">1</span><div><b>顔を検出して部位別に測る</b><p>目・口・髪を避け、額と両頬・あご・鼻まわりの肌だけを部位ごとにサンプリングします。</p></div></div>
-          <div class="step"><span class="num">2</span><div><b>照明の色かぶりを補正</b><p>蛍光灯の青み・電球の黄みなど、写真全体の色の偏りを推定して打ち消してから測ります。</p></div></div>
-          <div class="step"><span class="num">3</span><div><b>Lab色空間で測定</b><p>RGBではなく人の目に沿ったLab色空間で、黄み⇄青みの軸（b*）・明るさ（L*）・鮮やかさ（C*）を測ります。</p></div></div>
-          <div class="step"><span class="num">4</span><div><b>外れ値を除去</b><p>影・白とび・チークなど偏ったピクセルを中央値とtrimmed平均で除外し、部位同士が食い違えばその部位を外します。</p></div></div>
-          <div class="step"><span class="num">5</span><div><b>4シーズンへの近さで分類する</b><p>4シーズンそれぞれへの近さの目安と、判定の安定度（手ごたえスコア）を表示。中間寄りならその旨と次点も正直に伝えます。</p></div></div>
-        </div>
-        <p style="font-size:12px;color:var(--muted);margin:10px 0 0">黄み⇄青みの位置などの数値は、結果の「くわしい根拠」に表示されます。</p>
-      </section>
-
-      <section>
-        <h2 style="font-size:19px;font-family:'Shippori Mincho',serif;margin:0 0 10px">正確に撮るコツ</h2>
-        <ul class="tips">
-          <li>窓辺などの自然光で、顔に影が入らないように撮る</li>
-          <li>美肌フィルター・色補正アプリはOFFにする</li>
-          <li>ファンデーションは薄め、またはノーメイクが理想</li>
-          <li>白い壁を背景にすると、色かぶりを防げる</li>
-          <li>髪で顔が隠れず、額と頬が見えている写真を選ぶ</li>
-        </ul>
-      </section>
-      </div>
-    </details>
   </div>
 
   <!-- Result -->
@@ -412,8 +444,148 @@
         <ul class="quality" id="qualityList"></ul>
       </div>
     </details>
-    <p class="note">本診断は目安です。照明や写真の状態で結果は変わります。</p>
   </section>
+</div>
+
+<!-- Help -->
+<dialog id="helpDialog" aria-labelledby="helpTitle">
+  <div class="helpInner">
+    <div class="helpHead">
+      <h2 id="helpTitle">ヘルプ</h2>
+      <button type="button" class="btn btn-ghost btn-small" id="helpCloseBtn">閉じる</button>
+    </div>
+
+    <h3>判定のしくみ</h3>
+    <div class="steps">
+      <div class="step"><span class="num">1</span><div><b>顔を検出して部位別に測る</b><p>目・口・髪を避け、額と両頬・あご・鼻まわりの肌だけを部位ごとにサンプリングします。</p></div></div>
+      <div class="step"><span class="num">2</span><div><b>照明の色かぶりを補正</b><p>蛍光灯の青み・電球の黄みなど、写真全体の色の偏りを推定して打ち消してから測ります。</p></div></div>
+      <div class="step"><span class="num">3</span><div><b>Lab色空間で測定</b><p>RGBではなく人の目に沿ったLab色空間で、黄み⇄青みの軸（b*）・明るさ（L*）・鮮やかさ（C*）を測ります。</p></div></div>
+      <div class="step"><span class="num">4</span><div><b>外れ値を除去</b><p>影・白とび・チークなど偏ったピクセルを中央値とtrimmed平均で除外し、部位同士が食い違えばその部位を外します。</p></div></div>
+      <div class="step"><span class="num">5</span><div><b>4シーズンへの近さで分類する</b><p>4シーズンそれぞれへの近さの目安と、判定の安定度（手ごたえスコア）を表示。中間寄りならその旨と次点も正直に伝えます。</p></div></div>
+    </div>
+
+    <h3>正確に撮るコツ</h3>
+    <ul class="tips">
+      <li>窓辺などの自然光で、顔に影が入らないように撮る</li>
+      <li>美肌フィルター・色補正アプリはOFFにする</li>
+      <li>ファンデーションは薄め、またはノーメイクが理想</li>
+      <li>白い壁を背景にすると、色かぶりを防げる</li>
+      <li>髪で顔が隠れず、額と頬が見えている写真を選ぶ</li>
+      <li>別の照明の写真を足す（最大3枚）と判定が安定します</li>
+    </ul>
+
+    <h3>根拠の見方</h3>
+    <p>結果のすぐ下に、判定の理由を3点まで平易な言葉で表示します。数値の詳細（黄み⇄青みの位置・明るさ L*・鮮やかさ C*・血色感 a*・部位ごとの均一さ・照明の色かぶり）は、結果画面の「くわしい根拠」を開くと確認できます。「判定の手ごたえスコア」は正解である確率ではなく、写真の状態と測定のばらつきから見た判定の安定度を表す相対指標です。4シーズンへの近さの配分も同じ場所に表示されます。</p>
+
+    <h3>写真とプライバシー</h3>
+    <p>写真は端末の中だけで処理され、外に送られることはありません。サーバーへの送信や保存は行いません。結果を画像で保存・共有する場合も、生成は端末内で行われます。</p>
+
+    <h3>注意</h3>
+    <p>本診断は目安です。照明や写真の状態で結果は変わります。プロの対面診断の代わりにはなりません。結果が僅差の場合は、もう一つの候補もあわせて表示します。</p>
+
+    <div style="margin-top:24px">
+      <button type="button" class="btn btn-primary" id="replayObBtn" style="width:100%">はじめの案内をもう一度見る</button>
+    </div>
+  </div>
+</dialog>
+
+<!-- Onboarding (11 pages, 1 page = 1 message) -->
+<div id="obOverlay" role="dialog" aria-modal="true" aria-label="はじめの案内">
+  <div class="obTop">
+    <button type="button" class="obNavBtn" id="obBackBtn">← もどる</button>
+    <div class="obDots" id="obDots" aria-hidden="true"></div>
+    <button type="button" class="obNavBtn ghost" id="obSkipBtn">スキップ</button>
+  </div>
+  <div class="obStage" id="obStage">
+    <!-- 1 Hook -->
+    <section class="obPage" data-ob="1" aria-label="ようこそ">
+      <div class="obVisual"><div class="splitCircle obFloat" aria-hidden="true"></div></div>
+      <h2>似合う色が分かると、朝の迷いが減ります</h2>
+      <p class="obSub">リップや服の色選びが、ぐっと楽になります。</p>
+    </section>
+    <!-- 2 Choice -->
+    <section class="obPage" data-ob="2" aria-label="質問">
+      <h2>色選びで、いちばん近いのは？</h2>
+      <p class="obSub">タップで選んでください。</p>
+      <div class="obChoices" role="group" aria-label="悩みや希望の選択肢">
+        <button type="button" class="obChoice" data-choice="lip"><span class="dot" style="background:#E87A7A"></span>リップの色がしっくりこない</button>
+        <button type="button" class="obChoice" data-choice="clothes"><span class="dot" style="background:#7A9AB8"></span>服の色で顔がくすんで見える</button>
+        <button type="button" class="obChoice" data-choice="metal"><span class="dot" style="background:#D9A441"></span>金と銀、どっちが似合う？</button>
+        <button type="button" class="obChoice" data-choice="unknown"><span class="dot" style="background:#B9AFA6"></span>まだわからない</button>
+      </div>
+    </section>
+    <!-- 3 Match -->
+    <section class="obPage" data-ob="3" aria-label="あなたへの案内">
+      <div class="obVisual"><div class="lockBadge obPop" style="background:var(--warm-bg);color:var(--warm)" aria-hidden="true"><svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6L9 17l-5-5"/></svg></div></div>
+      <h2 id="obMatchTitle">そんなあなたに、このアプリがぴったりです</h2>
+      <p class="obSub" id="obMatchSub">写真の色を実測して、イエベ／ブルベの傾向を出します。</p>
+    </section>
+    <!-- 4 Identity -->
+    <section class="obPage" data-ob="4" aria-label="このアプリについて">
+      <div class="obVisual"><div class="faceMock obFloat" aria-hidden="true"><span></span></div></div>
+      <h2>写真1枚で、イエベ／ブルベを判定します</h2>
+      <p class="obSub">顔写真の肌の色を測って、4つのタイプから判定します。</p>
+    </section>
+    <!-- 5 Value: reasons -->
+    <section class="obPage" data-ob="5" aria-label="根拠もついてきます">
+      <div class="obVisual"><div class="obBars obPop" aria-hidden="true">
+        <div class="obBarRow"><span style="width:64px">黄み⇄青み</span><span class="bar"><i style="width:68%"></i></span></div>
+        <div class="obBarRow"><span style="width:64px">明るさ</span><span class="bar"><i style="width:55%"></i></span></div>
+        <div class="obBarRow"><span style="width:64px">鮮やかさ</span><span class="bar"><i style="width:42%"></i></span></div>
+      </div></div>
+      <h2>結果には「なぜそう言えるか」の根拠もついてきます</h2>
+      <p class="obSub">測った値をもとに、理由を言葉でお伝えします。</p>
+    </section>
+    <!-- 6 Value: privacy (quiet page) -->
+    <section class="obPage" data-ob="6" aria-label="写真の扱いについて">
+      <div class="obVisual"><div class="lockBadge" aria-hidden="true"><svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 018 0v3"/></svg></div></div>
+      <h2>写真は端末の中だけ。外には送りません</h2>
+      <p class="obSub">判定はすべてこの端末の中で行います。</p>
+    </section>
+    <!-- 7 Step 1 -->
+    <section class="obPage" data-ob="7" aria-label="ステップ1">
+      <div class="obVisual"><div class="stepBadge obPop" aria-hidden="true">1</div></div>
+      <h2>まずは撮る</h2>
+      <p class="obSub">自然光・正面・ノーメイクがコツです。</p>
+    </section>
+    <!-- 8 Step 2 -->
+    <section class="obPage" data-ob="8" aria-label="ステップ2">
+      <div class="obVisual"><div class="stepBadge obPop" aria-hidden="true">2</div></div>
+      <h2>判定は、ボタンひとつ</h2>
+      <p class="obSub">写真を選んだら、ボタンを押すだけです。</p>
+    </section>
+    <!-- 9 Step 3 -->
+    <section class="obPage" data-ob="9" aria-label="ステップ3">
+      <div class="obVisual"><div class="obSwatches obFloat" aria-hidden="true"><i style="background:#FFB59E"></i><i style="background:#FFD23F"></i><i style="background:#7ED3B2"></i><i style="background:#FF6B81"></i></div></div>
+      <h2>最後に、似合う色を見る</h2>
+      <p class="obSub">あなたに合う色を、パレットでお見せします。</p>
+    </section>
+    <!-- 10 Try: guess your type -->
+    <section class="obPage" data-ob="10" aria-label="試し操作">
+      <h2>あなたのタイプは、どれでしょう</h2>
+      <p class="obSub">気になるタイプをタップしてみてください。本当の判定は写真で出します。</p>
+      <div class="obTiles" role="group" aria-label="4タイプの色タイル">
+        <button type="button" class="obTile" data-tile="spring" style="background:linear-gradient(135deg,#E9A13B,#D95D7A)">イエベ春<small>明るく鮮やか</small></button>
+        <button type="button" class="obTile" data-tile="summer" style="background:linear-gradient(135deg,#7A9AB8,#C48AA6)">ブルベ夏<small>優しく涼しげ</small></button>
+        <button type="button" class="obTile" data-tile="autumn" style="background:linear-gradient(135deg,#8A5A2B,#6B7A3A)">イエベ秋<small>深く落ち着いた</small></button>
+        <button type="button" class="obTile" data-tile="winter" style="background:linear-gradient(135deg,#1F3A5F,#5B2A6B)">ブルベ冬<small>鮮やかでシャープ</small></button>
+      </div>
+    </section>
+    <!-- 11 Connect -->
+    <section class="obPage" data-ob="11" aria-label="さあ始めましょう">
+      <div class="obVisual"><div class="confetti" aria-hidden="true"><i style="left:12px;top:18px;background:#E87A4A"></i><i style="left:52px;top:6px;background:#FFD23F;animation-delay:.4s"></i><i style="left:96px;top:22px;background:#7ED3B2;animation-delay:.8s"></i><i style="left:132px;top:8px;background:#C48AA6;animation-delay:.2s"></i><i style="left:70px;top:52px;background:#8A7FB8;animation-delay:.6s"></i><i style="left:26px;top:66px;background:#4ECDC4;animation-delay:1s"></i><i style="left:118px;top:64px;background:#FF6B81;animation-delay:.5s"></i></div></div>
+      <h2>さっそく撮ってみましょう</h2>
+      <p class="obSub">最初の1枚が、あなたのタイプを教えてくれます。</p>
+    </section>
+  </div>
+  <div class="obFoot">
+    <p class="obPraise" id="obPraise" role="status" aria-live="polite"></p>
+    <div class="obCtas" id="obCtas" hidden>
+      <button type="button" class="btn btn-primary obNext" id="obCameraBtn">カメラで撮る</button>
+      <button type="button" class="btn btn-ghost obNext" id="obPickBtn">写真を選ぶ</button>
+    </div>
+    <button type="button" class="btn btn-primary obNext" id="obNextBtn">つぎへ</button>
+  </div>
 </div>
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
@@ -558,10 +730,10 @@
   });
 
   var TYPES={
-    spring:{key:'spring',title:'イエベ春',en:'YELLOW BASE — SPRING / Bright Warm',heroClass:'type-spring',heroStops:[['#E9A13B',0],['#E87A4A',0.55],['#D95D7A',1]],desc:'黄みのある明るい肌が特徴の、フレッシュで華やかなタイプ。明るく鮮やかな色で顔まわりがパッと明るく見えます。コーラルやピーチなど、温かくクリアな色が得意です。',tags:['イエベ','明るい','鮮やか','ゴールド◎'],paletteSub:'イエベ春は「明るく・黄み・クリア」な色がベスト。アイボリーをベースに、ビタミンカラーを顔まわりに。',palette:[['#FFF3D6','アイボリー','ベースカラー'],['#FFB59E','コーラルピーチ','チーク・リップ'],['#FF8A5B','アプリコット','トップス'],['#FFD23F','カナリアイエロー','差し色'],['#7ED3B2','ミントグリーン','ニット'],['#4ECDC4','ターコイズ','アクセサリー'],['#FF6B81','コーラルピンク','リップ'],['#C68642','キャメル','バッグ・靴']],makeup:['ファンデはイエローベージュ／オークル寄りの明るめ','リップはコーラル・オレンジ・ピーチ系','チークはアプリコットやコーラルで血色感を','アイシャドウはゴールド・オレンジブラウン'],fashion:['アクセサリーはゴールドが圧勝','白は真っ白よりアイボリー・生成り','髪色は明るめのハニー／ゴールデンブラウン'],avoid:[['#7A9AB8','くすみブルー'],['#8A7FB8','青みラベンダー'],['#2B2B2B','真っ黒']],avoidText:'青みの強いくすみ色や真っ黒は、顔が疲れて見えやすいので面積を小さく。'},
-    summer:{key:'summer',title:'ブルベ夏',en:'BLUE BASE — SUMMER / Soft Cool',heroClass:'type-summer',heroStops:[['#7A9AB8',0],['#8A7FB8',0.55],['#C48AA6',1]],desc:'青みのある柔らかな肌が特徴の、エレガントで涼しげなタイプ。スモーキーで優しい色が肌の透明感を引き立てます。パステルやくすみカラーが最も似合います。',tags:['ブルベ','明るい','ソフト','シルバー◎'],paletteSub:'ブルベ夏は「明るく・青み・ソフト」な色がベスト。グレーを少し混ぜたような、優しい色を選んで。',palette:[['#F2F4F8','オフホワイト','ベースカラー'],['#A8C3E0','スモーキーブルー','シャツ'],['#D8A7B1','ローズピンク','チーク・リップ'],['#B8A9D1','ラベンダー','トップス'],['#A8C8B8','セージグリーン','ニット'],['#E8C4C4','スモーキーピンク','ワンピース'],['#8FA8C8','ブルーグレー','ボトムス'],['#C9CED6','ライトグレー','アウター']],makeup:['ファンデはピンクベージュ／青み寄りの明るめ','リップはローズ・ベリーピンク・モーヴ系','チークは青みピンクで透明感をプラス','アイシャドウはグレージュ・ラベンダー・ピンクブラウン'],fashion:['アクセサリーはシルバー／プラチナが映える','白はオフホワイト・ソフトホワイト','髪色はアッシュ・グレージュ・ラベンダーブラウン'],avoid:[['#E67E22','鮮やかオレンジ'],['#D4A017','マスタード'],['#6B4A1F','濃いブラウン']],avoidText:'黄みの強いオレンジやマスタードは肌がくすんで見えやすいので注意。'},
-    autumn:{key:'autumn',title:'イエベ秋',en:'YELLOW BASE — AUTUMN / Deep Warm',heroClass:'type-autumn',heroStops:[['#8A5A2B',0],['#A65A2E',0.5],['#6B7A3A',1]],desc:'黄みのある落ち着いた肌が特徴の、シックで大人っぽいタイプ。深みのあるアースカラーやこっくりした色で、肌にツヤと立体感が出ます。',tags:['イエベ','深み','落ち着いた','ゴールド◎'],paletteSub:'イエベ秋は「深く・黄み・くすみ」な色がベスト。テラコッタやオリーブなど、自然の色が肌になじみます。',palette:[['#F5E6CC','エクリュ','ベースカラー'],['#C96F3B','テラコッタ','トップス'],['#8A8B4A','オリーブ','ボトムス'],['#D9A441','マスタード','差し色'],['#7A3B2E','ブリックレッド','リップ'],['#5C4033','ダークブラウン','アウター'],['#B85C38','バーントオレンジ','ニット'],['#4A6741','フォレストグリーン','ジャケット']],makeup:['ファンデはオークル／イエローベージュの標準〜やや深め','リップはテラコッタ・ブラウンレッド・レンガ色','チークはオレンジブラウン・ベージュ系','アイシャドウはカーキ・ゴールドブラウン・ブロンズ'],fashion:['アクセサリーはゴールド（マットな質感も◎）','白は生成り・クリーム色を選ぶ','髪色はダークブラウン・オリーブ・カッパー系'],avoid:[['#FF8FAB','青みピンク'],['#A8C3E0','パステルブルー'],['#E6E6FA','ラベンダー']],avoidText:'青みの強いパステルは浮きやすいので、顔から離して使うのがおすすめ。'},
-    winter:{key:'winter',title:'ブルベ冬',en:'BLUE BASE — WINTER / Vivid Cool',heroClass:'type-winter',heroStops:[['#1F3A5F',0],['#5B2A6B',0.55],['#111827',1]],desc:'青みのある肌とコントラストが特徴の、シャープで華やかなタイプ。鮮やかでクリアな色や、黒・白のモノトーンが肌の透明感と存在感を引き立てます。',tags:['ブルベ','鮮やか','コントラスト','シルバー◎'],paletteSub:'ブルベ冬は「鮮やか・青み・クリア」な色がベスト。くすみのない、はっきりした色を選んで。',palette:[['#FFFFFF','ピュアホワイト','ベースカラー'],['#111111','ブラック','アウター'],['#E91E63','フューシャピンク','リップ・差し色'],['#304FFE','ロイヤルブルー','トップス'],['#B71C1C','ワインレッド','ワンピース'],['#00897B','エメラルド','ニット'],['#7B1FA2','パープル','小物'],['#FFEB3B','レモンイエロー','差し色']],makeup:['ファンデはピンクベージュ／青みの標準色','リップはフューシャ・ワイン・青みレッド','チークは青みピンク〜ローズを薄くシャープに','アイシャドウはグレー・ネイビー・シルバー系'],fashion:['アクセサリーはシルバー／プラチナ・キラキラ系','白は真っ白（ピュアホワイト）が一番似合う','髪色は黒髪・ブルーブラック・アッシュダーク'],avoid:[['#D9A441','マスタード'],['#C68642','キャメル'],['#F5E6CC','ベージュ']],avoidText:'黄みの強いベージュやキャメルは顔がぼやけやすいので、顔まわりは避けて。'}
+    spring:{key:'spring',title:'イエベ春',en:'YELLOW BASE — SPRING / Bright Warm',heroClass:'type-spring',heroStops:[['#E9A13B',0],['#E87A4A',0.55],['#D95D7A',1]],desc:'黄みのある明るい肌。明るく鮮やかな色が似合います。',tags:['イエベ','明るい','鮮やか','ゴールド◎'],paletteSub:'イエベ春は「明るく・黄み・クリア」な色がベスト。アイボリーをベースに、ビタミンカラーを顔まわりに。',palette:[['#FFF3D6','アイボリー','ベースカラー'],['#FFB59E','コーラルピーチ','チーク・リップ'],['#FF8A5B','アプリコット','トップス'],['#FFD23F','カナリアイエロー','差し色'],['#7ED3B2','ミントグリーン','ニット'],['#4ECDC4','ターコイズ','アクセサリー'],['#FF6B81','コーラルピンク','リップ'],['#C68642','キャメル','バッグ・靴']],makeup:['ファンデはイエローベージュ／オークル寄りの明るめ','リップはコーラル・オレンジ・ピーチ系','チークはアプリコットやコーラルで血色感を','アイシャドウはゴールド・オレンジブラウン'],fashion:['アクセサリーはゴールドが圧勝','白は真っ白よりアイボリー・生成り','髪色は明るめのハニー／ゴールデンブラウン'],avoid:[['#7A9AB8','くすみブルー'],['#8A7FB8','青みラベンダー'],['#2B2B2B','真っ黒']],avoidText:'青みの強いくすみ色や真っ黒は、顔が疲れて見えやすいので面積を小さく。'},
+    summer:{key:'summer',title:'ブルベ夏',en:'BLUE BASE — SUMMER / Soft Cool',heroClass:'type-summer',heroStops:[['#7A9AB8',0],['#8A7FB8',0.55],['#C48AA6',1]],desc:'青みのある柔らかな肌。優しいくすみカラーが似合います。',tags:['ブルベ','明るい','ソフト','シルバー◎'],paletteSub:'ブルベ夏は「明るく・青み・ソフト」な色がベスト。グレーを少し混ぜたような、優しい色を選んで。',palette:[['#F2F4F8','オフホワイト','ベースカラー'],['#A8C3E0','スモーキーブルー','シャツ'],['#D8A7B1','ローズピンク','チーク・リップ'],['#B8A9D1','ラベンダー','トップス'],['#A8C8B8','セージグリーン','ニット'],['#E8C4C4','スモーキーピンク','ワンピース'],['#8FA8C8','ブルーグレー','ボトムス'],['#C9CED6','ライトグレー','アウター']],makeup:['ファンデはピンクベージュ／青み寄りの明るめ','リップはローズ・ベリーピンク・モーヴ系','チークは青みピンクで透明感をプラス','アイシャドウはグレージュ・ラベンダー・ピンクブラウン'],fashion:['アクセサリーはシルバー／プラチナが映える','白はオフホワイト・ソフトホワイト','髪色はアッシュ・グレージュ・ラベンダーブラウン'],avoid:[['#E67E22','鮮やかオレンジ'],['#D4A017','マスタード'],['#6B4A1F','濃いブラウン']],avoidText:'黄みの強いオレンジやマスタードは肌がくすんで見えやすいので注意。'},
+    autumn:{key:'autumn',title:'イエベ秋',en:'YELLOW BASE — AUTUMN / Deep Warm',heroClass:'type-autumn',heroStops:[['#8A5A2B',0],['#A65A2E',0.5],['#6B7A3A',1]],desc:'黄みのある落ち着いた肌。深みのあるアースカラーが似合います。',tags:['イエベ','深み','落ち着いた','ゴールド◎'],paletteSub:'イエベ秋は「深く・黄み・くすみ」な色がベスト。テラコッタやオリーブなど、自然の色が肌になじみます。',palette:[['#F5E6CC','エクリュ','ベースカラー'],['#C96F3B','テラコッタ','トップス'],['#8A8B4A','オリーブ','ボトムス'],['#D9A441','マスタード','差し色'],['#7A3B2E','ブリックレッド','リップ'],['#5C4033','ダークブラウン','アウター'],['#B85C38','バーントオレンジ','ニット'],['#4A6741','フォレストグリーン','ジャケット']],makeup:['ファンデはオークル／イエローベージュの標準〜やや深め','リップはテラコッタ・ブラウンレッド・レンガ色','チークはオレンジブラウン・ベージュ系','アイシャドウはカーキ・ゴールドブラウン・ブロンズ'],fashion:['アクセサリーはゴールド（マットな質感も◎）','白は生成り・クリーム色を選ぶ','髪色はダークブラウン・オリーブ・カッパー系'],avoid:[['#FF8FAB','青みピンク'],['#A8C3E0','パステルブルー'],['#E6E6FA','ラベンダー']],avoidText:'青みの強いパステルは浮きやすいので、顔から離して使うのがおすすめ。'},
+    winter:{key:'winter',title:'ブルベ冬',en:'BLUE BASE — WINTER / Vivid Cool',heroClass:'type-winter',heroStops:[['#1F3A5F',0],['#5B2A6B',0.55],['#111827',1]],desc:'青みとコントラストが際立つ肌。鮮やかでクリアな色が似合います。',tags:['ブルベ','鮮やか','コントラスト','シルバー◎'],paletteSub:'ブルベ冬は「鮮やか・青み・クリア」な色がベスト。くすみのない、はっきりした色を選んで。',palette:[['#FFFFFF','ピュアホワイト','ベースカラー'],['#111111','ブラック','アウター'],['#E91E63','フューシャピンク','リップ・差し色'],['#304FFE','ロイヤルブルー','トップス'],['#B71C1C','ワインレッド','ワンピース'],['#00897B','エメラルド','ニット'],['#7B1FA2','パープル','小物'],['#FFEB3B','レモンイエロー','差し色']],makeup:['ファンデはピンクベージュ／青みの標準色','リップはフューシャ・ワイン・青みレッド','チークは青みピンク〜ローズを薄くシャープに','アイシャドウはグレー・ネイビー・シルバー系'],fashion:['アクセサリーはシルバー／プラチナ・キラキラ系','白は真っ白（ピュアホワイト）が一番似合う','髪色は黒髪・ブルーブラック・アッシュダーク'],avoid:[['#D9A441','マスタード'],['#C68642','キャメル'],['#F5E6CC','ベージュ']],avoidText:'黄みの強いベージュやキャメルは顔がぼやけやすいので、顔まわりは避けて。'}
   };
 
   /* ---------- photo management ---------- */
@@ -1161,25 +1333,25 @@
     var grad=c.createLinearGradient(0,0,1080,420);
     t.heroStops.forEach(function(s){ grad.addColorStop(s[1],s[0]); });
     c.fillStyle=grad; c.fillRect(0,0,1080,420);
-    c.fillStyle='rgba(255,255,255,.92)'; c.font='700 32px sans-serif'; c.fillText(t.en,60,105);
-    c.fillStyle='#FFFFFF'; c.font='800 92px sans-serif'; c.fillText(t.title,60,225);
-    c.font='500 36px sans-serif'; c.fillText(lastRes.warm>=50?'イエベ（黄み）タイプ':'ブルベ（青み）タイプ',60,305);
-    c.font='500 30px sans-serif'; c.fillText('手ごたえスコア '+lastRes.conf+' / 100（安定度の目安）',60,365);
+    c.fillStyle='rgba(255,255,255,.92)'; c.font='700 32px "M PLUS Rounded 1c", sans-serif'; c.fillText(t.en,60,105);
+    c.fillStyle='#FFFFFF'; c.font='800 92px "M PLUS Rounded 1c", sans-serif'; c.fillText(t.title,60,225);
+    c.font='500 36px "M PLUS Rounded 1c", sans-serif'; c.fillText(lastRes.warm>=50?'イエベ（黄み）タイプ':'ブルベ（青み）タイプ',60,305);
+    c.font='500 30px "M PLUS Rounded 1c", sans-serif'; c.fillText('手ごたえスコア '+lastRes.conf+' / 100（安定度の目安）',60,365);
     var hex=document.getElementById('skinHex').textContent;
     c.fillStyle=hex; roundRectPath(c,60,470,150,150,24); c.fill();
     c.strokeStyle='#EADDD0'; roundRectPath(c,60,470,150,150,24); c.stroke();
-    c.fillStyle='#221C18'; c.font='800 42px sans-serif'; c.fillText('肌色サンプル '+hex,240,545);
-    c.font='500 29px sans-serif'; c.fillStyle='#7A6E64'; c.fillText('写真から抽出した平均の肌色',240,595);
-    c.fillStyle='#221C18'; c.font='800 48px sans-serif'; c.fillText('似合う色',60,725);
+    c.fillStyle='#221C18'; c.font='800 42px "M PLUS Rounded 1c", sans-serif'; c.fillText('肌色サンプル '+hex,240,545);
+    c.font='500 29px "M PLUS Rounded 1c", sans-serif'; c.fillStyle='#7A6E64'; c.fillText('写真から抽出した平均の肌色',240,595);
+    c.fillStyle='#221C18'; c.font='800 48px "M PLUS Rounded 1c", sans-serif'; c.fillText('似合う色',60,725);
     t.palette.forEach(function(p,i){
       var col=i%4,row=Math.floor(i/4);
       var x=60+col*245,y=765+row*230;
       c.fillStyle=p[0]; roundRectPath(c,x,y,215,120,18); c.fill();
       c.strokeStyle='#EADDD0'; roundRectPath(c,x,y,215,120,18); c.stroke();
-      c.fillStyle='#221C18'; c.font='700 26px sans-serif'; c.fillText(p[1],x,y+162);
-      c.font='800 25px sans-serif'; c.fillText(p[0],x,y+198);
+      c.fillStyle='#221C18'; c.font='700 26px "M PLUS Rounded 1c", sans-serif'; c.fillText(p[1],x,y+162);
+      c.font='800 25px "M PLUS Rounded 1c", sans-serif'; c.fillText(p[0],x,y+198);
     });
-    c.fillStyle='#7A6E64'; c.font='500 26px sans-serif';
+    c.fillStyle='#7A6E64'; c.font='500 26px "M PLUS Rounded 1c", sans-serif';
     c.fillText('※ 本診断は目安であり、プロの対面診断の代わりではありません。',60,1300);
     c.fillText(new Date().toLocaleDateString('ja-JP')+' 判定',60,1345);
     return cv;
@@ -1219,6 +1391,145 @@
     document.getElementById('uploadCard').scrollIntoView({behavior:'smooth'});
     setTimeout(openPicker,350);
   });
+})();
+</script>
+
+<script>
+(function(){
+  var OB_KEY='pcc_ob_v', OB_VER='1';
+  var sessionSeen=false;
+  function obSeen(){
+    if(sessionSeen) return true;
+    try{ return localStorage.getItem(OB_KEY)===OB_VER; }catch(e){ return false; }
+  }
+  function obMarkSeen(){
+    sessionSeen=true;
+    try{ localStorage.setItem(OB_KEY,OB_VER); }catch(e){ /* session-only fallback */ }
+  }
+  function buzz(ms){ try{ if(navigator.vibrate) navigator.vibrate(ms); }catch(e){} }
+
+  var overlay=document.getElementById('obOverlay');
+  var pages=Array.prototype.slice.call(overlay.querySelectorAll('.obPage'));
+  var dotsEl=document.getElementById('obDots');
+  var backBtn=document.getElementById('obBackBtn');
+  var skipBtn=document.getElementById('obSkipBtn');
+  var nextBtn=document.getElementById('obNextBtn');
+  var ctas=document.getElementById('obCtas');
+  var praiseEl=document.getElementById('obPraise');
+  var TOTAL=pages.length, cur=1, choice=null, advancing=false;
+
+  var MATCH={
+    lip:{echo:'「リップの色がしっくりこない」あなたには', title:'そんなあなたに、このアプリがぴったりです', sub:'写真の色を実測して傾向を出すので、似合うリップの方向が分かります。'},
+    clothes:{echo:'「服の色で顔がくすんで見える」あなたには', title:'そんなあなたに、このアプリがぴったりです', sub:'写真の色を実測して傾向を出すので、顔が明るく見える色が分かります。'},
+    metal:{echo:'「金と銀、どっちが似合う？」と気になるあなたには', title:'そんなあなたに、このアプリがぴったりです', sub:'写真の色を実測して傾向を出すので、金・銀の向きが分かります。'},
+    unknown:{echo:'まだわからない、というあなたも大丈夫', title:'まずは気軽に、様子見でどうぞ', sub:'写真の色を実測して傾向を出すので、考えるきっかけになります。'}
+  };
+  var praisePool={
+    small:['ありがとう','いいですね','受け取りました'],
+    mid:['教えてくれてありがとう。それがいちばん助かる手がかりです','なるほど、その感覚が大事な手がかりです','いい視点です。その悩み、このアプリの出番です'],
+    big:['準備はばっちりです。さあ、最初の1枚を撮りましょう','ここまでありがとう。あとは撮るだけです','おつかれさまでした。いよいよ判定です']
+  };
+  var lastPraise={small:-1,mid:-1,big:-1};
+  var praiseTimer=null;
+  function praise(level){
+    var pool=praisePool[level]; if(!pool) return;
+    var i; do{ i=Math.floor(Math.random()*pool.length); }while(pool.length>1 && i===lastPraise[level]);
+    lastPraise[level]=i;
+    praiseEl.textContent=pool[i];
+    praiseEl.classList.add('show');
+    clearTimeout(praiseTimer);
+    praiseTimer=setTimeout(function(){ praiseEl.classList.remove('show'); },2200);
+  }
+
+  function renderDots(){
+    var win=5, start=Math.max(1,Math.min(cur-2,TOTAL-win+1));
+    if(TOTAL<=win) start=1;
+    var html='';
+    for(var p=start;p<start+Math.min(win,TOTAL);p++){
+      var size=p===cur?11:(p===start||p===start+win-1?6:8);
+      html+='<i class="'+(p===cur?'cur':'')+'" style="width:'+size+'px;height:'+size+'px"></i>';
+    }
+    dotsEl.innerHTML=html;
+    dotsEl.setAttribute('aria-label','案内 ' + cur + ' ページ目');
+  }
+  function show(n){
+    cur=Math.max(1,Math.min(TOTAL,n));
+    pages.forEach(function(pg){ pg.classList.toggle('active', +pg.getAttribute('data-ob')===cur); });
+    backBtn.disabled = cur===1;
+    var isChoice = cur===2, isLast = cur===TOTAL;
+    nextBtn.hidden = isChoice || isLast;
+    nextBtn.textContent = 'つぎへ';
+    ctas.hidden = !isLast;
+    if(isLast){ praise('big'); buzz(20); }
+    renderDots();
+    var stage=document.getElementById('obStage'); if(stage) stage.scrollTop=0;
+  }
+  function openOb(fromHelp){
+    overlay.classList.add('show');
+    document.body.style.overflow='hidden';
+    show(1);
+    var first=overlay.querySelector('#obNextBtn:not([hidden])')||skipBtn;
+    if(first) first.focus({preventScroll:true});
+  }
+  function closeOb(){
+    overlay.classList.remove('show');
+    document.body.style.overflow='';
+    obMarkSeen();
+  }
+  function goNext(){ if(cur<TOTAL) show(cur+1); }
+
+  nextBtn.addEventListener('click',function(){ buzz(8); praise('small'); goNext(); });
+  backBtn.addEventListener('click',function(){ if(cur>1) show(cur-1); });
+  skipBtn.addEventListener('click',function(){ closeOb(); });
+
+  Array.prototype.forEach.call(overlay.querySelectorAll('.obChoice'),function(btn){
+    btn.addEventListener('click',function(){
+      if(advancing) return;
+      advancing=true;
+      choice=btn.getAttribute('data-choice');
+      btn.classList.add('picked');
+      buzz(15);
+      var m=MATCH[choice]||MATCH.unknown;
+      document.getElementById('obMatchTitle').textContent=m.title;
+      document.getElementById('obMatchSub').textContent=m.echo+'。'+m.sub;
+      praise('mid');
+      setTimeout(function(){ advancing=false; show(3); },380);
+    });
+  });
+  Array.prototype.forEach.call(overlay.querySelectorAll('.obTile'),function(tile){
+    tile.addEventListener('click',function(){
+      Array.prototype.forEach.call(overlay.querySelectorAll('.obTile'),function(t){ t.classList.remove('expanded'); });
+      tile.classList.add('expanded');
+      buzz(12);
+      praise('small');
+    });
+  });
+
+  document.getElementById('obCameraBtn').addEventListener('click',function(){
+    closeOb();
+    var b=document.getElementById('cameraBtn'); if(b) b.click();
+  });
+  document.getElementById('obPickBtn').addEventListener('click',function(){
+    closeOb();
+    var b=document.getElementById('pickBtn'); if(b) b.click();
+  });
+
+  /* Help dialog (native <dialog>: focus trap, Esc, backdrop handled by browser) */
+  var helpDialog=document.getElementById('helpDialog');
+  document.getElementById('helpBtn').addEventListener('click',function(){
+    if(helpDialog.showModal) helpDialog.showModal(); else helpDialog.setAttribute('open','');
+  });
+  document.getElementById('helpCloseBtn').addEventListener('click',function(){ helpDialog.close(); });
+  helpDialog.addEventListener('click',function(e){
+    var r=helpDialog.getBoundingClientRect();
+    if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom) helpDialog.close();
+  });
+  document.getElementById('replayObBtn').addEventListener('click',function(){
+    helpDialog.close();
+    openOb(true);
+  });
+
+  if(!obSeen()) openOb(false);
 })();
 </script>
 
