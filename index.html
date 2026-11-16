@@ -672,6 +672,7 @@
   var MAX_PHOTOS=3;
   var photos=[]; // {url, isBlobUrl, img, name, facePos}
   var pendingLoads=0;
+  var loadGeneration=0;
   var activeIdx=0;
 
   function revokePhoto(p){
@@ -681,6 +682,8 @@
     }
   }
   function clearPhotos(){
+    loadGeneration++;
+    pendingLoads=0;
     while(photos.length){ revokePhoto(photos.pop()); }
     activeIdx=0;
   }
@@ -857,6 +860,7 @@
     if(replaceMode){
       clearPhotos();
     }
+    var gen=loadGeneration;
     var slots=MAX_PHOTOS-(photos.length+pendingLoads);
     if(slots<=0){
       showError('写真は最大'+MAX_PHOTOS+'枚までです。「入れ替える」か、サムネイルの×で減らしてから追加してください。');
@@ -872,6 +876,10 @@
       var url=URL.createObjectURL(file);
       var img=new Image();
       img.onload=function(){
+        if(gen!==loadGeneration){
+          try{ URL.revokeObjectURL(url); }catch(e){}
+          return;
+        }
         pendingLoads=Math.max(0,pendingLoads-1);
         if(!img.naturalWidth || !img.naturalHeight || photos.length>=MAX_PHOTOS){
           try{ URL.revokeObjectURL(url); }catch(e){}
@@ -885,6 +893,10 @@
         syncPhotoUI();
       };
       img.onerror=function(){
+        if(gen!==loadGeneration){
+          try{ URL.revokeObjectURL(url); }catch(e){}
+          return;
+        }
         pendingLoads=Math.max(0,pendingLoads-1);
         try{ URL.revokeObjectURL(url); }catch(e){}
         var isHeic=/\.(heic|heif)$/i.test(file.name||'');
