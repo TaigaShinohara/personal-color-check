@@ -285,6 +285,11 @@
   .compareNote{display:none;margin-top:14px;font-size:var(--fs-small);background:var(--surface2);border:1px solid var(--line);border-radius:12px;padding:10px 12px;line-height:1.65}
   .compareNote.show{display:block}
   .resultActions{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+  .resultHead{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px}
+  .staleBanner{background:var(--warm-bg);border:1.5px solid var(--warm);border-radius:14px;padding:12px 14px;margin-bottom:14px}
+  .staleBanner p{margin:0 0 8px;font-weight:700;line-height:1.6}
+  .drapeThumbs{display:none;gap:6px;margin-top:8px}
+  .drapeThumbs .thumb{width:44px;height:44px;min-height:44px;border-radius:9px}
   .btn-save{background:var(--ink);color:var(--bg);min-height:52px}
   .toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%) translateY(20px);background:var(--ink);color:var(--bg);padding:11px 18px;border-radius:999px;font-size:var(--fs-small);font-weight:700;opacity:0;pointer-events:none;transition:.25s;z-index:90;max-width:88vw;text-align:center;box-shadow:0 10px 28px rgba(0,0,0,.22)}
   .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
@@ -448,11 +453,20 @@
           <button class="btn-textlink" id="changeBtn" style="display:none">写真をすべて入れ替える</button>
         </div>
       </div>
+      <button class="btn btn-ghost" id="viewResultBtn" style="display:none;width:100%;margin-top:12px">前回の結果を見る →</button>
     </section>
   </div>
 
   <!-- Result -->
   <section id="result">
+    <div class="resultHead">
+      <button type="button" class="btn btn-ghost btn-small" id="backToPhotoBtn">← 写真に戻る</button>
+      <button type="button" class="btn btn-ghost btn-small" id="helpBtnResult" aria-haspopup="dialog">？ ヘルプ</button>
+    </div>
+    <div class="staleBanner" id="staleBanner" style="display:none">
+      <p>写真が変更されています。この結果は前の写真のものです。</p>
+      <button type="button" class="btn btn-primary btn-small" id="staleReanalyzeBtn">新しい写真で判定する</button>
+    </div>
     <div class="resultTop">
       <div class="resultHero" id="resultHero">
         <h2 id="resultTitle">—</h2>
@@ -467,16 +481,6 @@
     </div>
     <div class="runner card" id="runnerUp"></div>
     <div class="compareNote" id="compareNote"></div>
-    <div class="resultActions">
-      <button class="btn btn-save" id="saveImgBtn" style="flex:1 1 100%">結果を画像で保存</button>
-      <button class="btn btn-ghost" id="shareBtn" style="min-height:48px">共有する</button>
-      <button class="btn btn-ghost" id="copyTextBtn" style="min-height:48px">テキストでコピー</button>
-    </div>
-    <div class="resultActions">
-      <button class="btn btn-ghost btn-small" id="replaceBtn">写真を入れ替える</button>
-      <button class="btn btn-ghost btn-small" id="addMoreBtn">写真を追加する</button>
-    </div>
-
     <div class="card" style="margin-top:22px">
       <h2>あなたに似合う色</h2>
       <p class="sub" id="paletteSub">—</p>
@@ -487,6 +491,8 @@
         <div class="drapeInfo">
           <div class="drapeLabel">顔まわりに色をあてて比較（ドレープ試着）</div>
           <div class="drapeCurrent"><span id="drapeName">—</span><small id="drapeMeta"></small></div>
+          <div class="addHint" id="drapePhotoLabel"></div>
+          <div class="drapeThumbs" id="drapeThumbs"></div>
           <div class="drapeQuick" id="drapeQuick"></div>
         </div>
       </div>
@@ -494,7 +500,7 @@
       <div class="palette" id="palette"></div>
     </div>
 
-    <details class="card fold" id="adviceFold" open style="margin-top:16px">
+    <details class="card fold" id="adviceFold" style="margin-top:16px">
       <summary>メイク・ファッション・苦手な色</summary>
       <div class="cols" style="margin-top:4px">
         <div class="mini"><h4>メイク</h4><ul id="makeupList"></ul></div>
@@ -532,6 +538,16 @@
         <ul class="quality" id="qualityList"></ul>
       </div>
     </details>
+    <div class="resultActions">
+      <button class="btn btn-save" id="saveImgBtn" style="flex:1 1 100%">結果を画像で保存</button>
+      <button class="btn btn-ghost" id="shareBtn" style="min-height:48px">共有する</button>
+      <button class="btn btn-ghost" id="copyTextBtn" style="min-height:48px">テキストでコピー</button>
+    </div>
+    <div class="resultActions">
+      <button class="btn btn-ghost btn-small" id="replaceBtn">写真を入れ替える</button>
+      <button class="btn btn-ghost btn-small" id="addMoreBtn">写真を追加する</button>
+    </div>
+
   </section>
 </div>
 
@@ -702,6 +718,10 @@
   var progress=document.getElementById('progress');
   var progressText=document.getElementById('progressText');
   var result=document.getElementById('result');
+  var heroEl=document.querySelector('.hero');
+  var mainEl=document.querySelector('.main');
+  var viewResultBtn=document.getElementById('viewResultBtn');
+  var staleBanner=document.getElementById('staleBanner');
   var toastEl=document.getElementById('toast');
   var toastTimer=null;
   function toast(msg){ if(!toastEl) return; toastEl.textContent=msg; toastEl.classList.add('show'); clearTimeout(toastTimer); toastTimer=setTimeout(function(){ toastEl.classList.remove('show'); },2400); }
@@ -719,6 +739,50 @@
   var hasResult=false, prevSummary=null, lastRes=null, isAnalyzing=false;
   var photoVersion=0, resultPhotoVersion=-1;
   function bumpPhotoVersion(){ photoVersion++; }
+  var currentView='photo', pushedResultEntry=false, pendingPhotoMode=null, pendingFocusAnalyze=false, savedPhotoScroll=0;
+  function isStale(){ return hasResult && photoVersion!==resultPhotoVersion; }
+  function syncStaleUI(){
+    if(staleBanner) staleBanner.style.display=isStale()?'block':'none';
+    if(viewResultBtn){
+      viewResultBtn.style.display=(hasResult && photos.length>0)?'inline-flex':'none';
+      viewResultBtn.textContent=isStale()?'前回の結果を見る →（写真が変更されています）':'前回の結果を見る →';
+    }
+  }
+  function showResultView(push){
+    if(!hasResult || !photos.length) return;
+    if(currentView!=='result') savedPhotoScroll=window.scrollY||0;
+    currentView='result';
+    heroEl.style.display='none';
+    mainEl.style.display='none';
+    result.classList.add('show');
+    window.scrollTo(0,0);
+    var rt=document.getElementById('resultTitle');
+    if(rt){ rt.setAttribute('tabindex','-1'); try{ rt.focus({preventScroll:true}); }catch(e){} }
+    if(push && !pushedResultEntry){ try{ history.pushState({pccView:'result'},''); pushedResultEntry=true; }catch(e){} }
+    syncStaleUI();
+  }
+  function showPhotoView(mode){
+    currentView='photo';
+    result.classList.remove('show');
+    heroEl.style.display='';
+    mainEl.style.display='';
+    window.scrollTo(0,savedPhotoScroll);
+    if(mode) openSourceMenu(mode);
+    if(pendingFocusAnalyze){ pendingFocusAnalyze=false; focusAnalyze(); }
+    syncStaleUI();
+  }
+  function leaveResultView(mode){
+    pendingPhotoMode=mode||null;
+    if(pushedResultEntry){ history.back(); }
+    else{ var m=pendingPhotoMode; pendingPhotoMode=null; showPhotoView(m); }
+  }
+  window.addEventListener('popstate',function(){
+    if(currentView==='result'){
+      pushedResultEntry=false;
+      var m=pendingPhotoMode; pendingPhotoMode=null;
+      showPhotoView(m);
+    }
+  });
   function focusAnalyze(){
     if(analyzeBtn.disabled) return;
     analyzeBtn.scrollIntoView({behavior:'smooth',block:'center'});
@@ -1021,6 +1085,23 @@
     var p=photos[activeIdx]||photos[0];
     drapeImg.src=p.url;
     drapeImg.style.objectPosition=p.facePos ? (p.facePos.x+'% '+p.facePos.y+'%') : 'center 28%';
+    var dpl=document.getElementById('drapePhotoLabel');
+    if(dpl) dpl.textContent='試着中の写真：'+(photos.indexOf(p)+1)+'枚目 / '+photos.length+'枚';
+    var dt=document.getElementById('drapeThumbs');
+    if(dt){
+      dt.innerHTML='';
+      dt.style.display=photos.length>1?'flex':'none';
+      photos.forEach(function(ph,i){
+        var b=document.createElement('button');
+        b.type='button';
+        b.className='thumb'+(i===activeIdx?' active':'');
+        b.setAttribute('aria-label',(i+1)+'枚目の写真で試着する');
+        var im=document.createElement('img'); im.src=ph.url; im.alt='';
+        b.appendChild(im);
+        b.addEventListener('click',function(){ activeIdx=i; syncPhotoUI(); });
+        dt.appendChild(b);
+      });
+    }
   }
 
   function syncPhotoUI(){
@@ -1039,6 +1120,8 @@
       closeSourceMenu();
       thumbsEl.classList.remove('show');
       thumbsEl.innerHTML='';
+      if(hasResult) hasResult=false;
+      syncStaleUI();
       return;
     }
     if(activeIdx>=photos.length) activeIdx=Math.max(0,photos.length-1);
@@ -1084,6 +1167,7 @@
     });
     thumbsEl.classList.toggle('show',photos.length>1);
     syncDrapePhoto();
+    syncStaleUI();
   }
 
   /* The drop zone is a display area, not a tap entry (F-1/F-5).
@@ -1689,8 +1773,7 @@
     prevSummary={key:res.typeKey,title:t.title,conf:res.conf};
     lastRes=res; hasResult=true; resultPhotoVersion=photoVersion;
     syncPhotoUI();
-    result.classList.add('show');
-    result.scrollIntoView({behavior:'smooth',block:'start'});
+    showResultView(true);
   }
 
   analyzeBtn.addEventListener('click',function(){
@@ -1726,6 +1809,7 @@
             var ok=out.filter(Boolean);
             if(!ok.length){
               showError('写真から肌色を読み取れませんでした。顔が大きく正面に写った、明るい写真でお試しください。');
+              errorBox.scrollIntoView({behavior:'smooth',block:'center'});
               return;
             }
             render(aggregate(ok));
@@ -1737,6 +1821,7 @@
           progress.classList.remove('show');
           analyzeBtn.disabled=false;
           showError('解析中に問題が起きました。別の写真でお試しください。');
+          errorBox.scrollIntoView({behavior:'smooth',block:'center'});
         });
       });
     });
@@ -1845,14 +1930,16 @@
     if(!lastRes){ toast('まず判定してください'); return; }
     copyText(summaryText(),'結果テキストをコピーしました');
   });
-  document.getElementById('replaceBtn').addEventListener('click',function(){
-    document.getElementById('uploadCard').scrollIntoView({behavior:'smooth'});
-    openSourceMenu('replace');
-  });
+  document.getElementById('replaceBtn').addEventListener('click',function(){ leaveResultView('replace'); });
   document.getElementById('addMoreBtn').addEventListener('click',function(){
     if(photos.length>=MAX_PHOTOS) return;
-    document.getElementById('uploadCard').scrollIntoView({behavior:'smooth'});
-    openSourceMenu('add');
+    leaveResultView('add');
+  });
+  document.getElementById('backToPhotoBtn').addEventListener('click',function(){ leaveResultView(null); });
+  viewResultBtn.addEventListener('click',function(){ showResultView(true); });
+  document.getElementById('staleReanalyzeBtn').addEventListener('click',function(){
+    pendingFocusAnalyze=true;
+    leaveResultView(null);
   });
 })();
 </script>
@@ -2023,10 +2110,12 @@
     if(helpDialog.close) helpDialog.close();
     else helpDialog.removeAttribute('open');
   }
-  document.getElementById('helpBtn').addEventListener('click',function(){
+  function openHelp(){
     if(window._pccStopCamera) window._pccStopCamera();
     if(helpDialog.showModal) helpDialog.showModal(); else helpDialog.setAttribute('open','');
-  });
+  }
+  document.getElementById('helpBtn').addEventListener('click',openHelp);
+  document.getElementById('helpBtnResult').addEventListener('click',openHelp);
   document.getElementById('helpCloseBtn').addEventListener('click',closeHelp);
   helpDialog.addEventListener('click',function(e){
     if(e.target===helpDialog) closeHelp();
