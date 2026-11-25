@@ -842,7 +842,7 @@
     if(mode==='replace') camReplace=true; else if(mode==='add') camReplace=false;
     hideError();
     closeSourceMenu();
-    if(photos.length>=MAX_PHOTOS){
+    if(!camReplace && photos.length>=MAX_PHOTOS){
       showError('写真は最大'+MAX_PHOTOS+'枚までです。「写真をすべて入れ替える」か、サムネイルの×で減らしてから撮影してください。');
       return;
     }
@@ -882,7 +882,7 @@
 
   function capturePhoto(){
     if(!camVideo || !camVideo.videoWidth){ showError('カメラの準備ができていません。少し待ってからもう一度お試しください。'); return; }
-    if(photos.length>=MAX_PHOTOS){
+    if(!camReplace && photos.length>=MAX_PHOTOS){
       stopCamera();
       showError('写真は最大'+MAX_PHOTOS+'枚までです。サムネイルの×で減らしてから撮影してください。');
       return;
