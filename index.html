@@ -112,14 +112,12 @@
   .card h3{font-size:var(--fs-body);letter-spacing:.06em;margin:0 0 10px}
   .sub{color:var(--muted);font-size:var(--fs-body);line-height:1.75;margin:0 0 16px}
   /* Upload */
-  .drop{border:1.8px dashed var(--drop-line);border-radius:18px;background:var(--surface2);padding:8px;transition:border-color .2s,background-color .2s,transform .2s;cursor:pointer}
-  .drop:hover{border-color:var(--warm)}
+  .drop{border:1.8px dashed var(--drop-line);border-radius:18px;background:var(--surface2);padding:8px;transition:border-color .2s,background-color .2s,transform .2s}
   #errorBox{display:none;margin-top:12px;background:var(--error-bg);border:1px solid var(--error-line);color:var(--error-ink);border-radius:12px;padding:12px 14px;font-size:var(--fs-small);font-weight:700;line-height:1.6}
   .drop.drag{border-color:var(--warm);background:var(--warm-bg);transform:scale(.995)}
   .drop-inner{border-radius:14px;min-height:210px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:22px 18px;position:relative;overflow:hidden}
   .drop.has-photo .drop-inner{padding:10px;min-height:auto}
   .upload-icon{width:62px;height:62px;border-radius:50%;background:var(--ink);color:var(--bg);display:grid;place-items:center;margin-bottom:14px;transition:transform .2s}
-  .drop:hover .upload-icon{transform:translateY(-2px)}
   .upload-icon svg{width:28px;height:28px}
   .drop b{font-size:var(--fs-h3)}
   .drop p{color:var(--muted);font-size:var(--fs-body);margin:6px 0 0;max-width:360px}
@@ -150,7 +148,17 @@
   .btn-ghost{background:transparent;color:var(--ink);border:1px solid var(--line);min-height:52px;padding:0 16px}
   .btn-ghost:hover:not(:disabled){background:var(--surface2);border-color:var(--drop-line)}
   .btn-small{min-height:40px;font-size:var(--fs-small);padding:0 14px}
-  .drop:focus-visible{outline:3px solid var(--warm);outline-offset:3px}
+  #sourceMenu{display:none;margin-top:12px;border:1.5px solid var(--line);border-radius:14px;padding:14px;background:var(--surface2)}
+  #sourceMenu.show{display:block}
+  #sourceMenu .smTitle{font-weight:800;font-size:var(--fs-body)}
+  #sourceMenu .smWarn{color:var(--warm);font-size:var(--fs-small);font-weight:700;line-height:1.6;margin:6px 0 0}
+  #sourceMenu .actions{margin-top:12px}
+  .btn-pulse{animation:btnPulse 1.6s ease}
+  @keyframes btnPulse{0%,100%{box-shadow:0 0 0 0 rgba(0,0,0,0)}25%{box-shadow:0 0 0 7px var(--warm-bg)}60%{box-shadow:0 0 0 3px var(--warm-bg)}}
+  @media (prefers-reduced-motion: reduce){.btn-pulse{animation:none}}
+  .limitNote{font-size:var(--fs-small);color:var(--muted)}
+  .replaceRow{text-align:center}
+  .btn-textlink{background:none;border:none;color:var(--muted);text-decoration:underline;font-size:var(--fs-small);min-height:44px;cursor:pointer;padding:0 10px}
   /* Steps */
   .steps{display:grid;gap:12px}
   .step{display:flex;gap:12px;padding:13px 0;border-bottom:1px solid var(--line)}
@@ -376,12 +384,12 @@
     <!-- Upload -->
     <section class="card" id="uploadCard">
 
-      <div class="drop" id="dropZone" role="button" tabindex="0" aria-label="写真を選択する">
+      <div class="drop" id="dropZone">
         <div class="drop-inner" id="dropInner">
           <div id="emptyState">
             <div class="upload-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 16V4m0 0l-4 4m4-4l4 4"/><path d="M4 16v3a1 1 0 001 1h14a1 1 0 001-1v-3"/></svg></div>
-            <b>写真を選ぶ</b>
-            <p>タップ、またはドラッグ＆ドロップ</p>
+            <b>顔写真</b>
+            <p>下のボタンから撮るか、アルバムから選んでください。ドラッグ＆ドロップでも追加できます。</p>
           </div>
           <div id="previewWrap">
             <div class="previewBox" id="previewBox">
@@ -393,12 +401,12 @@
           </div>
         </div>
       </div>
-      <div class="entryActions">
+      <div class="entryActions" id="entryActions">
         <button class="btn btn-primary" id="cameraBtn">
           <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" aria-hidden="true"><path d="M4 8h3l2-2.5h6L17 8h3a1 1 0 011 1v10a1 1 0 01-1 1H4a1 1 0 01-1-1V9a1 1 0 011-1z"/><circle cx="12" cy="13.5" r="3.6"/></svg>
           カメラで撮る
         </button>
-        <button class="btn btn-ghost" id="pickBtn">写真を選ぶ</button>
+        <button class="btn btn-ghost" id="pickBtn">アルバムから選ぶ</button>
       </div>
 
       <div id="cameraPanel">
@@ -414,6 +422,16 @@
         <p class="addHint" style="margin-top:8px">明るい場所で、楕円に顔を合わせてください。</p>
       </div>
 
+      <div id="sourceMenu" role="group" aria-label="写真の取り込み方法">
+        <div class="smTitle" id="sourceMenuTitle">写真を追加</div>
+        <p class="smWarn" id="sourceMenuWarn" style="display:none">今の写真はすべて消え、新しい写真に置き換わります。読み込みに失敗した場合は、今の写真がそのまま残ります。</p>
+        <div class="actions">
+          <button class="btn btn-primary" id="srcCameraBtn">カメラで撮る</button>
+          <button class="btn btn-ghost" id="srcAlbumBtn">アルバムから選ぶ</button>
+          <button class="btn btn-ghost" id="srcCancelBtn">やめる</button>
+        </div>
+      </div>
+
       <div class="thumbs" id="thumbs" aria-label="選択中の写真一覧"></div>
       <div id="errorBox"></div>
 
@@ -422,10 +440,13 @@
       <div class="photoActions">
         <button class="btn btn-primary" id="analyzeBtn" disabled>この写真で判定する →</button>
         <div class="subActions">
-          <button class="btn btn-ghost" id="changeBtn" style="display:none">入れ替える</button>
-          <button class="btn btn-ghost" id="addBtn" style="display:none">追加する</button>
+          <button class="btn btn-ghost" id="addBtn" style="display:none">＋ 写真を追加</button>
         </div>
         <span class="addHint" id="addHint" style="display:none">別の照明の写真を足すと判定が安定します（最大3枚）。</span>
+        <span class="limitNote" id="limitNote" style="display:none">写真は3枚まで（上限に達しています）。</span>
+        <div class="replaceRow">
+          <button class="btn-textlink" id="changeBtn" style="display:none">写真をすべて入れ替える</button>
+        </div>
       </div>
     </section>
   </div>
@@ -452,8 +473,8 @@
       <button class="btn btn-ghost" id="copyTextBtn" style="min-height:48px">テキストでコピー</button>
     </div>
     <div class="resultActions">
-      <button class="btn btn-ghost btn-small" id="replaceBtn">入れ替えて再判定</button>
-      <button class="btn btn-ghost btn-small" id="addMoreBtn">追加して再判定</button>
+      <button class="btn btn-ghost btn-small" id="replaceBtn">写真を入れ替える</button>
+      <button class="btn btn-ghost btn-small" id="addMoreBtn">写真を追加する</button>
     </div>
 
     <div class="card" style="margin-top:22px">
@@ -644,7 +665,7 @@
     <p class="obPraise" id="obPraise" role="status" aria-live="polite"></p>
     <div class="obCtas" id="obCtas" hidden>
       <button type="button" class="btn btn-primary obNext" id="obCameraBtn">カメラで撮る</button>
-      <button type="button" class="btn btn-ghost obNext" id="obPickBtn">写真を選ぶ</button>
+      <button type="button" class="btn btn-ghost obNext" id="obPickBtn">アルバムから選ぶ</button>
     </div>
     <button type="button" class="btn btn-primary obNext" id="obNextBtn">つぎへ</button>
   </div>
@@ -670,6 +691,11 @@
   var changeBtn=document.getElementById('changeBtn');
   var addBtn=document.getElementById('addBtn');
   var addHint=document.getElementById('addHint');
+  var entryActions=document.getElementById('entryActions');
+  var limitNote=document.getElementById('limitNote');
+  var sourceMenu=document.getElementById('sourceMenu');
+  var sourceMenuTitle=document.getElementById('sourceMenuTitle');
+  var sourceMenuWarn=document.getElementById('sourceMenuWarn');
   var cameraBtn=document.getElementById('cameraBtn');
   var pickBtn=document.getElementById('pickBtn');
   var thumbsEl=document.getElementById('thumbs');
@@ -691,6 +717,14 @@
     else fallback();
   }
   var hasResult=false, prevSummary=null, lastRes=null, isAnalyzing=false;
+  var photoVersion=0, resultPhotoVersion=-1;
+  function bumpPhotoVersion(){ photoVersion++; }
+  function focusAnalyze(){
+    if(analyzeBtn.disabled) return;
+    analyzeBtn.scrollIntoView({behavior:'smooth',block:'center'});
+    analyzeBtn.classList.remove('btn-pulse'); void analyzeBtn.offsetWidth; analyzeBtn.classList.add('btn-pulse');
+    setTimeout(function(){ analyzeBtn.classList.remove('btn-pulse'); },1800);
+  }
 
   var MAX_PHOTOS=3;
   var photos=[]; // {url, isBlobUrl, img, name, facePos}
@@ -705,6 +739,7 @@
     }
   }
   function clearPhotos(){
+    bumpPhotoVersion();
     loadGeneration++;
     pendingLoads=0;
     while(photos.length){ revokePhoto(photos.pop()); }
@@ -721,7 +756,7 @@
     hideError();
     stopCamera();
     if(!replaceMode && photos.length>=MAX_PHOTOS){
-      showError('写真は最大'+MAX_PHOTOS+'枚までです。「入れ替える」か、サムネイルの×で減らしてから追加してください。');
+      showError('写真は最大'+MAX_PHOTOS+'枚までです。「写真をすべて入れ替える」か、サムネイルの×で減らしてから追加してください。');
       return;
     }
     var input=document.createElement('input');
@@ -745,11 +780,29 @@
     input.click();
   }
 
+  /* ---------- source menu: the single place to choose camera vs album ----------
+     Mode (add / replace) is decided by which button opened the menu;
+     the source (camera / album) is chosen here, once. (UX review F-1/F-2) */
+  var srcMode='add';
+  function openSourceMenu(mode){
+    srcMode=(mode==='replace')?'replace':'add';
+    hideError();
+    stopCamera();
+    sourceMenuTitle.textContent=(srcMode==='replace')?'写真をすべて入れ替える':'写真を追加';
+    sourceMenuWarn.style.display=(srcMode==='replace')?'block':'none';
+    sourceMenu.classList.add('show');
+    sourceMenu.scrollIntoView({behavior:'smooth',block:'center'});
+  }
+  function closeSourceMenu(){ sourceMenu.classList.remove('show'); }
+  document.getElementById('srcCameraBtn').addEventListener('click',function(e){ e.preventDefault(); var m=srcMode; closeSourceMenu(); startCamera(m); });
+  document.getElementById('srcAlbumBtn').addEventListener('click',function(e){ e.preventDefault(); var m=srcMode; closeSourceMenu(); openPicker(m==='replace'); });
+  document.getElementById('srcCancelBtn').addEventListener('click',function(e){ e.preventDefault(); closeSourceMenu(); });
+
   /* ---------- camera capture (same pipeline as picked photos) ---------- */
   var cameraPanel=document.getElementById('cameraPanel');
   var camBox=document.getElementById('camBox');
   var camVideo=document.getElementById('camVideo');
-  var camStream=null, camFacing='user';
+  var camStream=null, camFacing='user', camReplace=false;
 
   function loadPhotoFromUrl(url,name,isBlobUrl,replaceMode){
     var img=new Image();
@@ -766,9 +819,11 @@
         return;
       }
       photos.push({url:url,isBlobUrl:!!isBlobUrl,img:img,name:name||'カメラで撮影した写真',facePos:null});
+      bumpPhotoVersion();
       activeIdx=photos.length-1;
       syncPhotoUI();
-      toast('撮影しました。このまま判定できます');
+      toast('撮影しました。下の判定ボタンを押してください');
+      focusAnalyze();
     };
     img.onerror=function(){
       if(isBlobUrl){ try{ URL.revokeObjectURL(url); }catch(e){} }
@@ -783,10 +838,12 @@
     if(cameraPanel) cameraPanel.classList.remove('show');
   }
 
-  function startCamera(){
+  function startCamera(mode){
+    if(mode==='replace') camReplace=true; else if(mode==='add') camReplace=false;
     hideError();
+    closeSourceMenu();
     if(photos.length>=MAX_PHOTOS){
-      showError('写真は最大'+MAX_PHOTOS+'枚までです。「入れ替える」か、サムネイルの×で減らしてから撮影してください。');
+      showError('写真は最大'+MAX_PHOTOS+'枚までです。「写真をすべて入れ替える」か、サムネイルの×で減らしてから撮影してください。');
       return;
     }
     if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){
@@ -796,7 +853,7 @@
       input.style.display='none';
       document.body.appendChild(input);
       input.addEventListener('change',function(){
-        if(input.files && input.files.length) handleFiles(input.files, false);
+        if(input.files && input.files.length) handleFiles(input.files, camReplace);
         if(input.parentNode) input.parentNode.removeChild(input);
       });
       input.click();
@@ -818,7 +875,7 @@
         navigator.mediaDevices.getUserMedia({video:true,audio:false})
           .then(onStream)
           .catch(function(){
-            showError('カメラを起動できませんでした（権限が許可されていないか、ブラウザの制限の可能性があります）。「写真を選ぶ」からお試しください。');
+            showError('カメラを起動できませんでした（権限が許可されていないか、ブラウザの制限の可能性があります）。「アルバムから選ぶ」からお試しください。');
           });
       });
   }
@@ -841,11 +898,11 @@
     stopCamera();
     if(cv.toBlob){
       cv.toBlob(function(blob){
-        if(!blob){ loadPhotoFromUrl(cv.toDataURL('image/jpeg',0.92),'カメラで撮影した写真.jpg',false,false); return; }
-        loadPhotoFromUrl(URL.createObjectURL(blob),'カメラで撮影した写真.jpg',true,false);
+        if(!blob){ loadPhotoFromUrl(cv.toDataURL('image/jpeg',0.92),'カメラで撮影した写真.jpg',false,camReplace); return; }
+        loadPhotoFromUrl(URL.createObjectURL(blob),'カメラで撮影した写真.jpg',true,camReplace);
       },'image/jpeg',0.92);
     }else{
-      loadPhotoFromUrl(cv.toDataURL('image/jpeg',0.92),'カメラで撮影した写真.jpg',false,false);
+      loadPhotoFromUrl(cv.toDataURL('image/jpeg',0.92),'カメラで撮影した写真.jpg',false,camReplace);
     }
   }
 
@@ -853,7 +910,7 @@
   document.addEventListener('visibilitychange',function(){ if(document.hidden) stopCamera(); });
   window.addEventListener('pagehide',stopCamera);
 
-  cameraBtn.addEventListener('click',function(e){ e.preventDefault(); startCamera(); });
+  cameraBtn.addEventListener('click',function(e){ e.preventDefault(); startCamera('add'); });
   pickBtn.addEventListener('click',function(e){ e.preventDefault(); openPicker(false); });
   document.getElementById('shootBtn').addEventListener('click',function(e){ e.preventDefault(); capturePhoto(); });
   document.getElementById('closeCamBtn').addEventListener('click',function(e){ e.preventDefault(); stopCamera(); });
@@ -880,13 +937,14 @@
       if(files.length) showError('画像ファイル（JPEG・PNG・WebPなど）を選んでください。');
       return;
     }
-    if(replaceMode){
-      clearPhotos();
-    }
     var gen=loadGeneration;
-    var slots=MAX_PHOTOS-(photos.length+pendingLoads);
+    var oldPhotos=replaceMode?photos.slice():null;
+    var replacePending=!!replaceMode;
+    var batchStartCount=photos.length;
+    var batchDone=0;
+    var slots=replaceMode?(MAX_PHOTOS-pendingLoads):(MAX_PHOTOS-(photos.length+pendingLoads));
     if(slots<=0){
-      showError('写真は最大'+MAX_PHOTOS+'枚までです。「入れ替える」か、サムネイルの×で減らしてから追加してください。');
+      showError('写真は最大'+MAX_PHOTOS+'枚までです。「写真をすべて入れ替える」か、サムネイルの×で減らしてから追加してください。');
       return;
     }
     var toLoad=valid.slice(0,slots);
@@ -904,16 +962,37 @@
           return;
         }
         pendingLoads=Math.max(0,pendingLoads-1);
-        if(!img.naturalWidth || !img.naturalHeight || photos.length>=MAX_PHOTOS){
+        if(!img.naturalWidth || !img.naturalHeight){
           try{ URL.revokeObjectURL(url); }catch(e){}
-          if(photos.length>=MAX_PHOTOS) showError('写真は最大'+MAX_PHOTOS+'枚までです。サムネイルの×で減らしてから追加してください。');
-          else showError('その画像は読み込めませんでした。別の写真でお試しください。');
+          showError('その画像は読み込めませんでした。別の写真でお試しください。');
+          syncPhotoUI();
+          return;
+        }
+        if(replacePending){
+          /* F-2: only drop the old photos once a new one has actually loaded,
+             so a failed pick never wipes the current set. */
+          replacePending=false;
+          oldPhotos.forEach(function(op){
+            var ix=photos.indexOf(op);
+            if(ix>=0){ photos.splice(ix,1); revokePhoto(op); }
+          });
+          if(activeIdx>=photos.length) activeIdx=Math.max(0,photos.length-1);
+        }
+        if(photos.length>=MAX_PHOTOS){
+          try{ URL.revokeObjectURL(url); }catch(e){}
+          showError('写真は最大'+MAX_PHOTOS+'枚までです。サムネイルの×で減らしてから追加してください。');
           syncPhotoUI();
           return;
         }
         photos.push({url:url,isBlobUrl:true,img:img,name:file.name||'選択した写真',facePos:null});
+        bumpPhotoVersion();
         activeIdx=photos.length-1;
         syncPhotoUI();
+        batchDone++;
+        if(batchDone===1 && batchStartCount>0){
+          toast(replaceMode?'写真を入れ替えました。下の判定ボタンを押してください':'写真を追加しました。下の判定ボタンを押してください');
+        }
+        focusAnalyze();
       };
       img.onerror=function(){
         if(gen!==loadGeneration){
@@ -955,7 +1034,9 @@
       changeBtn.style.display='none';
       addBtn.style.display='none';
       addHint.style.display='none';
-      cameraBtn.className='btn btn-primary';
+      limitNote.style.display='none';
+      entryActions.style.display='';
+      closeSourceMenu();
       thumbsEl.classList.remove('show');
       thumbsEl.innerHTML='';
       return;
@@ -970,11 +1051,14 @@
     dropZone.classList.add('has-photo');
     dropInner.classList.add('has-photo');
     analyzeBtn.disabled=isAnalyzing;
-    analyzeBtn.textContent=photos.length>1?(photos.length+'枚の平均で判定する →'):'この写真で判定する →';
-    cameraBtn.className='btn btn-ghost';
-    changeBtn.style.display='inline-flex';
+    analyzeBtn.textContent=(hasResult && photoVersion!==resultPhotoVersion)?'新しい写真で判定する →':(photos.length>1?(photos.length+'枚の平均で判定する →'):'この写真で判定する →');
+    entryActions.style.display='none';
+    changeBtn.style.display='inline-block';
     addBtn.style.display=(photos.length<MAX_PHOTOS)?'inline-flex':'none';
     addHint.style.display=(photos.length<MAX_PHOTOS)?'block':'none';
+    limitNote.style.display=(photos.length>=MAX_PHOTOS)?'block':'none';
+    var addMoreBtnEl=document.getElementById('addMoreBtn');
+    if(addMoreBtnEl) addMoreBtnEl.disabled=(photos.length>=MAX_PHOTOS);
     /* R-7: previous result stays visible until a new one is rendered */
     // thumbnails
     thumbsEl.innerHTML='';
@@ -990,6 +1074,7 @@
         e.stopPropagation();
         var removed=photos.splice(i,1)[0];
         revokePhoto(removed);
+        bumpPhotoVersion();
         if(activeIdx>=photos.length) activeIdx=Math.max(0,photos.length-1);
         syncPhotoUI();
       });
@@ -1001,10 +1086,10 @@
     syncDrapePhoto();
   }
 
-  dropZone.addEventListener('click',function(e){ if(previewWrap.classList.contains('show') && e.target.closest('#previewWrap')) return; openPicker(false); });
-  dropZone.addEventListener('keydown',function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); openPicker(false); } });
-  changeBtn.addEventListener('click',function(e){ e.preventDefault(); openPicker(true); });
-  addBtn.addEventListener('click',function(e){ e.preventDefault(); openPicker(false); });
+  /* The drop zone is a display area, not a tap entry (F-1/F-5).
+     Drag & drop and paste below remain add-only convenience paths (F-8, accepted as-is). */
+  changeBtn.addEventListener('click',function(e){ e.preventDefault(); openSourceMenu('replace'); });
+  addBtn.addEventListener('click',function(e){ e.preventDefault(); openSourceMenu('add'); });
   ['dragenter','dragover'].forEach(function(ev){ dropZone.addEventListener(ev,function(e){e.preventDefault();dropZone.classList.add('drag');}); });
   dropZone.addEventListener('dragleave',function(e){
     e.preventDefault();
@@ -1602,7 +1687,7 @@
       cn.classList.add('show');
     }else{ cn.classList.remove('show'); cn.innerHTML=''; }
     prevSummary={key:res.typeKey,title:t.title,conf:res.conf};
-    lastRes=res; hasResult=true;
+    lastRes=res; hasResult=true; resultPhotoVersion=photoVersion;
     syncPhotoUI();
     result.classList.add('show');
     result.scrollIntoView({behavior:'smooth',block:'start'});
@@ -1762,12 +1847,12 @@
   });
   document.getElementById('replaceBtn').addEventListener('click',function(){
     document.getElementById('uploadCard').scrollIntoView({behavior:'smooth'});
-    openPicker(true);
+    openSourceMenu('replace');
   });
   document.getElementById('addMoreBtn').addEventListener('click',function(){
-    if(photos.length>=MAX_PHOTOS){ toast('写真は最大'+MAX_PHOTOS+'枚までです。「入れ替えて再判定」をお使いください'); return; }
+    if(photos.length>=MAX_PHOTOS) return;
     document.getElementById('uploadCard').scrollIntoView({behavior:'smooth'});
-    openPicker(false);
+    openSourceMenu('add');
   });
 })();
 </script>
